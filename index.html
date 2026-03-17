@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>chinmay@portfolio:~$</title>
+  <meta name="description" content="Chinmay Harish — Product Manager, Builder, Tinkerer ." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700&family=Roboto+Mono:ital,wght@0,400;0,700&display=swap"
+    rel="stylesheet" />
+  <style>
+    /* ── Design Tokens ── */
+    :root {
+      --bg: #0A0A0B;
+      /* Modern Dark Deep Charcoal */
+      --bg2: #121214;
+      --border: #27272a;
+      --green: #E4E4E7;
+      /* Soft Off-White */
+      --cyan: #4ADE80;
+      /* Terminal Green */
+      --yellow: #E4E4E7;
+      --red: #E4E4E7;
+      --magenta: #A1A1AA;
+      --orange: #E4E4E7;
+      --white: #E4E4E7;
+      --dim: #52525B;
+      --cursor: rgba(228, 228, 231, 0.8);
+      --glow: rgba(74, 222, 128, 0.1);
+      --font: 'JetBrains Mono', monospace;
+
+      /* Special Identity: Claude Orange */
+      --brand-gold: #DA7756;
+      --brand-glow: rgba(218, 119, 86, 0.2);
+
+      --sp-1: 8px;
+      --sp-2: 16px;
+      --sp-3: 24px;
+      --sp-4: 32px;
+      --radius: 4px;
+      --speed: 200ms;
+
+      /* Full ANSI-like Palette */
+      --ansi-black: #000000;
+      --ansi-red: #ff5555;
+      --ansi-green: #50fa7b;
+      --ansi-yellow: #f1fa8c;
+      --ansi-blue: #bd93f9;
+      --ansi-magenta: #ff79c6;
+      --ansi-cyan: #8be9fd;
+      --ansi-white: #f8f8f2;
+      --ansi-bright-black: #6272a4;
+      --ansi-bright-red: #ff6e6e;
+      --ansi-bright-green: #69ff94;
+      --ansi-bright-yellow: #ffffa5;
+      --ansi-bright-blue: #d6acff;
+      --ansi-bright-magenta: #ff92df;
+      --ansi-bright-cyan: #a4ffff;
+      --ansi-bright-white: #ffffff;
+    }
+
+    @keyframes rgbShift {
+      0% {
+        color: #ff5555;
+        border-color: #ff5555;
+        box-shadow: 0 0 8px #ff555522;
+      }
+
+      20% {
+        color: #f1fa8c;
+        border-color: #f1fa8c;
+        box-shadow: 0 0 8px #f1fa8c22;
+      }
+
+      40% {
+        color: #50fa7b;
+        border-color: #50fa7b;
+        box-shadow: 0 0 8px #50fa7b22;
+      }
+
+      60% {
+        color: #8be9fd;
+        border-color: #8be9fd;
+        box-shadow: 0 0 8px #8be9fd22;
+      }
+
+      80% {
+        color: #bd93f9;
+        border-color: #bd93f9;
+        box-shadow: 0 0 8px #bd93f922;
+      }
+
+      100% {
+        color: #ff5555;
+        border-color: #ff5555;
+        box-shadow: 0 0 8px #ff555522;
+      }
+    }
+
+    .rgb-border {
+      animation: rgbShift 10s linear infinite !important;
+    }
+
+    .rgb-text {
+      animation: rgbShift 10s linear infinite;
+    }
+
+    @keyframes flicker {
+      0% {
+        opacity: 0.85;
+      }
+
+      5% {
+        opacity: 0.95;
+      }
+
+      10% {
+        opacity: 0.8;
+      }
+
+      15% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .booting {
+      animation: flicker 0.1s infinite;
+    }
+
+    /* V1 Glowing Banner Box */
+    @keyframes borderPulse {
+      0% {
+        box-shadow: 0 0 8px 2px rgba(200, 60, 255, 0.5), inset 0 0 8px rgba(200, 60, 255, 0.1);
+        border-color: rgba(200, 60, 255, 0.6);
+      }
+
+      50% {
+        box-shadow: 0 0 22px 4px rgba(200, 60, 255, 0.9), inset 0 0 14px rgba(200, 60, 255, 0.2);
+        border-color: rgba(200, 60, 255, 1);
+      }
+
+      100% {
+        box-shadow: 0 0 8px 2px rgba(200, 60, 255, 0.5), inset 0 0 8px rgba(200, 60, 255, 0.1);
+        border-color: rgba(200, 60, 255, 0.6);
+      }
+    }
+
+    .banner-box {
+      border: 1.5px solid rgba(218, 119, 86, 0.7);
+      border-radius: 4px;
+      padding: 10px 16px 8px;
+      display: inline-block;
+      margin-bottom: 6px;
+      animation: rgbShift 10s linear infinite !important;
+    }
+
+    /* Typewriter for whoami reveal */
+    @keyframes fadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeSlide 0.25s ease forwards;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--sp-3);
+      transition: background var(--speed) ease, color var(--speed) ease;
+    }
+
+    .window {
+      width: 100%;
+      max-width: 900px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, .8);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .titlebar {
+      background: rgba(0, 0, 0, .4);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      user-select: none;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .dot.r {
+      background: #ff5f57;
+    }
+
+    .dot.y {
+      background: #febc2e;
+    }
+
+    .dot.g {
+      background: #28c840;
+    }
+
+    .titlebar-label {
+      flex: 1;
+      text-align: center;
+      color: var(--dim);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .terminal {
+      padding: var(--sp-2) var(--sp-3);
+      min-height: 520px;
+      max-height: 75vh;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
+    .terminal::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .terminal::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    .output-line {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .output-line.cmd {
+      color: var(--green);
+    }
+
+    .output-line.blank {
+      height: 12px;
+    }
+
+    .output-line.section-head {
+      color: var(--brand-gold);
+      font-weight: 700;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      margin: 12px 0 6px;
+      text-shadow: 0 0 8px var(--brand-glow);
+    }
+
+    .clr-g {
+      color: var(--green);
+    }
+
+    .clr-c {
+      color: var(--cyan);
+    }
+
+    .clr-y {
+      color: var(--yellow);
+    }
+
+    .clr-r {
+      color: var(--red);
+    }
+
+    .clr-m {
+      color: var(--magenta);
+    }
+
+    .clr-d {
+      color: var(--dim);
+    }
+
+    .clr-gold {
+      color: var(--brand-gold);
+      text-shadow: 0 0 10px var(--brand-glow);
+    }
+
+    .terminal a,
+    .clickable {
+      color: var(--cyan);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all var(--speed) ease;
+    }
+
+    .terminal a:hover,
+    .clickable:hover {
+      text-decoration: underline;
+      filter: brightness(1.2);
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      padding: 12px var(--sp-3) 24px;
+      gap: 0;
+    }
+
+    .prompt-prefix {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .prompt-at {
+      color: var(--dim);
+    }
+
+    .prompt-host {
+      color: var(--cyan);
+    }
+
+    .prompt-path {
+      color: var(--magenta);
+    }
+
+    .prompt-sign {
+      color: var(--yellow);
+      margin-right: 12px;
+    }
+
+    #cmd-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--white);
+      outline: none;
+      caret-color: var(--white);
+    }
+
+    #suggestion {
+      padding: 0 var(--sp-3) 4px;
+      min-height: 20px;
+    }
+
+    .skill-bar-track {
+      display: inline-block;
+      width: 120px;
+      height: 4px;
+      background: #111;
+      border-radius: 2px;
+      margin-right: 12px;
+      vertical-align: middle;
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      display: block;
+      height: 100%;
+      background: var(--brand-gold);
+      box-shadow: 0 0 10px var(--brand-glow);
+      width: 0%;
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ascii-art {
+      color: var(--brand-gold);
+      text-shadow: 0 0 12px var(--brand-glow), 0 0 3px var(--brand-gold);
+      font-weight: bold;
+      line-height: 1.1;
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+
+      .terminal {
+        padding: 12px;
+      }
+    }
+
+    .animate-in {
+      animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── Phase 16: TUI Feature Styles ── */
+
+    /* fzf fuzzy-finder modal */
+    #fzf-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #fzf-overlay.open {
+      display: flex;
+    }
+
+    #fzf-box {
+      background: #0a0a0a;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      width: min(660px, 90vw);
+      box-shadow: 0 0 40px rgba(74, 222, 128, 0.15);
+      overflow: hidden;
+    }
+
+    #fzf-input-row {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid #1a1a1a;
+      gap: 10px;
+    }
+
+    #fzf-input-row span {
+      color: var(--cyan);
+      font-weight: 700;
+    }
+
+    #fzf-search {
+      flex: 1;
+      background: transparent;
+      border: none;
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--white);
+      outline: none;
+    }
+
+    #fzf-list {
+      max-height: 340px;
+      overflow-y: auto;
+      padding: 6px 0;
+    }
+
+    .fzf-item {
+      padding: 7px 18px;
+      cursor: pointer;
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      transition: background 80ms;
+    }
+
+    .fzf-item.active,
+    .fzf-item:hover {
+      background: rgba(74, 222, 128, 0.08);
+    }
+
+    .fzf-item .fzf-cmd {
+      color: var(--cyan);
+      min-width: 90px;
+    }
+
+    .fzf-item .fzf-desc {
+      color: var(--dim);
+    }
+
+    #fzf-hint {
+      padding: 7px 16px;
+      border-top: 1px solid #1a1a1a;
+      font-size: 11px;
+      color: var(--dim);
+      display: flex;
+      gap: 16px;
+    }
+
+    #fzf-hint kbd {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-family: var(--font);
+      font-size: 10px;
+      color: var(--white);
+    }
+
+    /* explore — 3-pane file manager */
+    #explore-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      z-index: 100;
+      flex-direction: column;
+    }
+
+    #explore-overlay.open {
+      display: flex;
+    }
+
+    #explore-panes {
+      display: grid;
+      grid-template-columns: 160px 220px 1fr;
+      flex: 1;
+      overflow: hidden;
+      border-top: 1px solid #1a1a1a;
+    }
+
+    .explore-pane {
+      border-right: 1px solid #1a1a1a;
+      padding: 12px 0;
+      overflow-y: auto;
+      font-size: 13px;
+    }
+
+    .explore-pane:last-child {
+      border-right: none;
+      padding: 12px 16px;
+    }
+
+    .explore-pane-title {
+      color: var(--dim);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 0 14px 8px;
+      border-bottom: 1px solid #111;
+      margin-bottom: 6px;
+    }
+
+    .explore-row {
+      padding: 5px 14px;
+      cursor: pointer;
+      color: var(--dim);
+      transition: background 60ms, color 60ms;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .explore-row.selected {
+      background: rgba(74, 222, 128, 0.15);
+      color: var(--cyan);
+      border-left: 2.5px solid var(--cyan);
+      padding-left: 11.5px;
+      font-weight: 700;
+    }
+
+    .explore-row.selected * {
+      color: var(--cyan) !important;
+    }
+
+    .explore-row .explore-icon {
+      color: var(--cyan);
+      margin-right: 6px;
+    }
+
+    #explore-preview {
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--dim);
+      overflow-y: auto;
+    }
+
+    #explore-preview .prev-key {
+      color: var(--cyan);
+    }
+
+    #explore-preview .prev-val {
+      color: var(--white);
+    }
+
+    #explore-status {
+      padding: 6px 16px;
+      font-size: 11px;
+      color: var(--dim);
+      border-top: 1px solid #1a1a1a;
+      display: flex;
+      gap: 18px;
+    }
+
+    #explore-status kbd {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-family: var(--font);
+      color: var(--white);
+    }
+
+    /* top — btop dashboard */
+    #top-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      z-index: 100;
+      flex-direction: column;
+      padding: 16px 20px;
+      font-size: 13px;
+      overflow: hidden;
+    }
+
+    #top-overlay.open {
+      display: flex;
+    }
+
+    #top-header {
+      color: var(--brand-gold);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .top-row {
+      margin-bottom: 10px;
+    }
+
+    .top-label {
+      color: var(--dim);
+      display: inline-block;
+      width: 60px;
+      font-size: 12px;
+    }
+
+    .top-bar-track {
+      display: inline-block;
+      width: 220px;
+      height: 8px;
+      background: #111;
+      border-radius: 2px;
+      vertical-align: middle;
+      overflow: hidden;
+      margin: 0 10px;
+    }
+
+    .top-bar-fill {
+      display: block;
+      height: 100%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--glow);
+      border-radius: 2px;
+      transition: width 0.3s;
+    }
+
+    .top-pct {
+      color: var(--white);
+      font-size: 12px;
+      width: 36px;
+      display: inline-block;
+    }
+
+    #top-procs {
+      margin-top: 16px;
+      border-top: 1px solid #1a1a1a;
+      padding-top: 12px;
+    }
+
+    .top-proc-head {
+      display: grid;
+      grid-template-columns: 60px 1fr 70px 80px;
+      color: var(--dim);
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .top-proc-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 70px 80px;
+      color: var(--white);
+      font-size: 12px;
+      padding: 3px 0;
+    }
+
+    .top-proc-row .top-pid {
+      color: var(--dim);
+    }
+
+    .top-proc-row .top-cpu {
+      color: var(--cyan);
+    }
+
+    .top-proc-row .top-status {
+      color: var(--brand-gold);
+    }
+
+    #top-hint {
+      margin-top: auto;
+      padding-top: 12px;
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    .font-bold {
+      font-weight: 700;
+    }
+
+    .reversed {
+      background: var(--cyan);
+      color: var(--bg);
+    }
+
+    /* git log — career timeline */
+    #gitlog-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      z-index: 100;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #gitlog-overlay.open {
+      display: flex;
+    }
+
+    #gitlog-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      font-size: 13px;
+    }
+
+    .gl-commit {
+      margin-bottom: 20px;
+      cursor: default;
+    }
+
+    .gl-hash {
+      color: var(--brand-gold);
+    }
+
+    .gl-branch {
+      color: var(--cyan);
+    }
+
+    .gl-author {
+      color: var(--dim);
+    }
+
+    .gl-date {
+      color: var(--dim);
+    }
+
+    .gl-msg {
+      color: var(--white);
+      font-weight: 700;
+      margin: 4px 0 2px 16px;
+    }
+
+    .gl-detail {
+      color: var(--dim);
+      margin-left: 28px;
+    }
+
+    .gl-pipe {
+      color: #2a2a2a;
+    }
+
+    .gl-commit.focused {
+      background: rgba(74, 222, 128, 0.15);
+      color: var(--ansi-bright-green);
+      border-left: 3px solid var(--ansi-bright-green);
+      padding-left: 17px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .gl-commit.focused * {
+      color: var(--ansi-bright-green) !important;
+    }
+
+    #gitlog-hint {
+      padding: 6px 16px;
+      border-top: 1px solid #1a1a1a;
+      font-size: 11px;
+      color: var(--dim);
+    }
+
+    /* bored — snake game */
+    #snake-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      z-index: 100;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #snake-overlay.open {
+      display: flex;
+    }
+
+    #snake-board {
+      font-family: var(--font);
+      font-size: 13px;
+      line-height: 1.15;
+      color: var(--white);
+      letter-spacing: 2px;
+      white-space: pre;
+    }
+
+    #snake-hud {
+      margin-top: 10px;
+      display: flex;
+      gap: 24px;
+      font-size: 12px;
+      color: var(--dim);
+    }
+
+    #snake-score {
+      color: var(--cyan);
+      font-weight: 700;
+    }
+
+    #snake-hirme {
+      display: none;
+      text-align: center;
+    }
+
+    #snake-hirme .ascii-art {
+      font-size: 12px;
+    }
+
+    /* chat — AI agent */
+    #chat-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      z-index: 100;
+      flex-direction: column;
+    }
+
+    #chat-overlay.open {
+      display: flex;
+    }
+
+    #chat-history {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .chat-you {
+      color: var(--cyan);
+      margin-bottom: 4px;
+    }
+
+    .chat-you::before {
+      content: 'you: ';
+      color: var(--dim);
+    }
+
+    .chat-ai {
+      color: var(--white);
+      margin-bottom: 14px;
+    }
+
+    .chat-ai::before {
+      content: 'chinmay.ai: ';
+      color: var(--brand-gold);
+    }
+
+    #chat-input-row {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px 16px;
+      border-top: 1px solid #1a1a1a;
+      gap: 8px;
+    }
+
+    #chat-input-row span {
+      color: var(--cyan);
+    }
+
+    #chat-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      font-family: var(--font);
+      font-size: 13px;
+      color: var(--white);
+      outline: none;
+    }
+
+    #chat-hint {
+      padding: 0 20px 8px;
+      font-size: 11px;
+      color: var(--dim);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="window">
+    <div class="titlebar">
+      <div class="dot r"></div>
+      <div class="dot y"></div>
+      <div class="dot g"></div>
+      <div class="titlebar-label">chinmay@terminal:~$</div>
+    </div>
+    <div class="terminal" id="terminal" role="log"></div>
+
+    <!-- Phase 16 overlays (absolutely positioned inside .window) -->
+    <!-- fzf modal (fixed on viewport) built by JS -->
+    <div id="fzf-overlay" role="dialog" aria-modal="true" aria-label="Fuzzy finder"></div>
+
+    <!-- explore: ranger 3-pane -->
+    <div id="explore-overlay" aria-label="File explorer">
+      <div id="explore-panes">
+        <div class="explore-pane" id="ep-dirs"></div>
+        <div class="explore-pane" id="ep-files"></div>
+        <div class="explore-pane" id="ep-preview">
+          <div id="explore-preview"></div>
+        </div>
+      </div>
+      <div id="explore-status">
+        <span><kbd>↑↓</kbd> navigate</span>
+        <span><kbd>→</kbd> enter / <kbd>←</kbd> back</span>
+        <span><kbd>q</kbd> exit</span>
+      </div>
+    </div>
+
+    <!-- top: btop dashboard -->
+    <div id="top-overlay" aria-label="System monitor">
+      <div id="top-header">
+        <span>CHINMAY-OS — PROCESS MONITOR</span>
+        <span id="top-uptime"></span>
+      </div>
+      <div id="top-meters"></div>
+      <div id="top-procs">
+        <div class="top-proc-head"><span>PID</span><span>NAME</span><span>CPU%</span><span>STATUS</span></div>
+        <div id="top-proc-list"></div>
+      </div>
+      <div id="top-hint"><kbd
+          style="background:#111;border:1px solid #2a2a2a;border-radius:3px;padding:1px 6px;font-family:var(--font);color:var(--white);font-size:10px">q</kbd>
+        exit</div>
+    </div>
+
+    <!-- git log: career timeline -->
+    <div id="gitlog-overlay" aria-label="Career timeline">
+      <div id="gitlog-list"></div>
+      <div id="gitlog-hint"><kbd
+          style="background:#111;border:1px solid #2a2a2a;border-radius:3px;padding:1px 5px;font-family:var(--font);color:var(--white);font-size:10px">↑↓</kbd>
+        navigate &nbsp; <kbd
+          style="background:#111;border:1px solid #2a2a2a;border-radius:3px;padding:1px 5px;font-family:var(--font);color:var(--white);font-size:10px">q</kbd>
+        quit</div>
+    </div>
+
+    <!-- snake game -->
+    <div id="snake-overlay" aria-label="Snake game">
+      <div id="snake-hirme"></div>
+      <div id="snake-board"></div>
+      <div id="snake-hud">
+        <span>SCORE: <span id="snake-score">0</span></span>
+        <span id="snake-msg">PRESS SPACE TO START</span>
+        <span><kbd
+            style="background:#111;border:1px solid #2a2a2a;border-radius:3px;padding:1px 4px;font-family:var(--font);font-size:10px">q</kbd>
+          quit</span>
+      </div>
+    </div>
+
+    <!-- chat -->
+    <div id="chat-overlay" aria-label="AI chat">
+      <div id="chat-history"></div>
+      <div id="chat-hint">/exit to quit · powered by structured knowledge</div>
+      <div id="chat-input-row">
+        <span>›</span>
+        <input id="chat-input" type="text" autocomplete="off" spellcheck="false"
+          placeholder="Ask me anything about Chinmay…" />
+      </div>
+    </div>
+
+    <div id="suggestion"></div>
+    <div class="input-row">
+      <span class="clr-gold font-bold">chinmay</span><span class="prompt-at">@</span><span
+        class="prompt-host">portfolio</span><span class="prompt-path">:~</span><span class="prompt-sign">$</span>
+      <input id="cmd-input" type="text" autocomplete="off" spellcheck="false" autofocus />
+    </div>
+  </div>
+
+  <script>
+    const DATA = {
+      name: "Chinmay Harish",
+      role: "Product Manager, Builder, Tinkerer",
+      location: "Bengaluru, IN",
+      email: "chinmayharish03@gmail.com",
+      phone: "+91 9449124052",
+      github: "https://github.com/ChinmayHarish",
+      linkedin: "https://www.linkedin.com/in/chinmay-harish-03106t",
+      instagram: "https://www.instagram.com/chinmeh_/",
+      resume: "https://drive.google.com/file/d/1Xw-ep554ZGDVOarTIYfrJN57vfbntnBN/view?usp=sharing",
+      experience: [
+        {
+          company: "Primenumbers Technologies Pvt Ltd.",
+          role: "Associate Product Manager",
+          period: "Jul 2023 – Present",
+          bullets: [
+            "Led end-to-end lifecycle of Infiniteworks (BI tool); aggregating 80,000+ opportunities.",
+            "Defined roadmap, pricing, and GTM strategy; hired and managed product operations team.",
+            "Spearheaded 'Competitive Intelligence' module for competitor financial analysis.",
+            "Authored detailed PRDs and user stories prioritizing engineering feasibility.",
+            "Devised 'Missed Bids' campaign contributing to ₹2 Cr annual revenue pipeline.",
+            "Redesigned signup flow for Bidfortune and Palladium (8→5 steps), reducing drop-offs by 30%."
+          ]
+        },
+        {
+          company: "Primenumbers Technologies Pvt Ltd.",
+          role: "Data Analyst Intern",
+          period: "Mar 2023 – Jun 2023",
+          bullets: [
+            "Designed and automated complex SQL reporting dashboards for real-time data visibility.",
+            "Conducted A/B testing and behavior analysis; optimized SQL queries (15% latency reduction)."
+          ]
+        },
+        {
+          company: "BASF India",
+          role: "Student Intern",
+          period: "2023",
+          bullets: [
+            "Worked in a top-3 global Refinish Lab for clients like Tata Motors and Mahindra.",
+            "Color-matched coating colors for Tata Nexon EV under strict quality standards."
+          ]
+        }
+      ],
+      education: [
+        {
+          institution: "B.M.S College of Engineering",
+          degree: "B.E. in Chemical Engineering (CGPA: 8.8/10)",
+          period: "2019 – 2023"
+        },
+        {
+          institution: "Delhi Public School",
+          degree: "Primary & Secondary Schooling",
+          period: "Until 2017"
+        }
+      ],
+      projects: [
+        { name: "Uproot", desc: "Agentic IDP platform powered by Gemini API.", stack: ["Gemini API", "Next.js", "TypeScript"], demo: "https://uproot-app.vercel.app/" },
+        { name: "ILovePDF Clone", desc: "Full-stack PDF tool with Drive uploads and Stripe payments.", stack: ["React", "Node.js", "Stripe"], demo: "https://ilovepdf-clone-app.vercel.app/" },
+        { name: "Spotify Visualizer", desc: "Interactive infinite canvas visualizing music cards via Three.js.", stack: ["Three.js", "Spotify API", "React"], demo: "https://spotify-visualiser.vercel.app/" },
+        { name: "CyberSerpent", desc: "8-bit cyberpunk Snake game with retro neon aesthetics.", stack: ["Canvas API", "Vanilla JS"], demo: "https://cyber-serpent-8bit.vercel.app/" },
+        { name: "Neon Tetris", desc: "Reimagined Tetris with modern neon/pixel-art UI.", stack: ["P5.js", "React"], demo: "https://tetris-neon-retro.netlify.app/" }
+      ],
+      skills: {
+        "Product": ["Jira", "Trello", "Linear", "Notion", "Roadmap Planning", "GTM Strategy"],
+        "Analytics": ["PostgreSQL", "Mixpanel", "Google Analytics", "SQL Dashboards"],
+        "Design": ["Figma", "Whimsical", "Canva", "Prototyping"]
+      }
+    };
+
+    const terminal = document.getElementById('terminal');
+    const input = document.getElementById('cmd-input');
+    const suggBox = document.getElementById('suggestion');
+    let history = [], histIdx = -1;
+
+    function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    function lnk(url, text) { return `<a href="${url}" target="_blank" rel="noopener noreferrer">${esc(text)}</a>`; }
+    function rgb(r, g, b, t) { return `<span style="color:rgb(${r},${g},${b})">${esc(t)}</span>`; }
+    const barStr = (pct, clr, full = 20) => {
+      const count = Math.round((pct / 100) * full);
+      return `<span style="color:${clr}">${'▀'.repeat(count)}</span><span style="color:var(--dim)">${'▀'.repeat(full - count)}</span>`;
+    };
+
+    function line(html = '', cls = '') {
+      const p = document.createElement('p');
+      p.className = 'output-line animate-in' + (cls ? ' ' + cls : '');
+      p.innerHTML = html;
+      terminal.appendChild(p);
+      terminal.scrollTop = terminal.scrollHeight;
+      return p;
+    }
+    function blank() { line('', 'blank'); }
+
+    function printPrompt(cmd) {
+      line(`<span class="clr-gold font-bold">chinmay</span><span class="prompt-at clr-d">@</span><span class="prompt-host clr-c">portfolio</span><span class="prompt-path clr-m">:~</span> <span class="prompt-sign clr-y">$</span> ${esc(cmd)}`, 'cmd');
+    }
+
+    const COMMANDS = {};
+    const CMD_META = {};
+    function reg(name, desc, fn) { COMMANDS[name] = fn; CMD_META[name] = desc; }
+
+    reg('help', 'list all commands', () => {
+      blank();
+      line('<span class="clr-gold font-bold">STUDIO TERMINAL v3.0</span>');
+      Object.entries(CMD_META).forEach(([cmd, desc]) => {
+        line(`  <span class="clr-g">${esc(cmd).padEnd(12)}</span><span class="clr-d">—</span> ${esc(desc)}`);
+      });
+      blank();
+    });
+
+    reg('whoami', 'identity card', () => {
+      blank();
+      line(`  <span class="clr-gold" style="font-weight:700;font-size:16px">${esc(DATA.name)}</span>`);
+      line(`  <span class="clr-m">${esc(DATA.role)}</span> <span class="clr-d">| ${esc(DATA.location)}</span>`);
+      blank();
+      line(`  ${lnk('mailto:' + DATA.email, 'Email')}  ·  ${lnk(DATA.github, 'GitHub')}  ·  ${lnk(DATA.linkedin, 'LinkedIn')}`);
+      blank();
+    });
+
+    reg('experience', 'work history', () => {
+      blank();
+      line('[ WORK EXPERIENCE ]', 'section-head');
+      DATA.experience.forEach(exp => {
+        blank();
+        line(`  <span class="clr-g font-bold">${esc(exp.company)}</span>`);
+        line(`  <span class="clr-m">${esc(exp.role)}</span> <span class="clr-d">· ${esc(exp.period)}</span>`);
+        exp.bullets.forEach(b => line(`  <span class="clr-d">▸</span> ${esc(b)}`));
+      });
+      blank();
+    });
+
+    reg('education', 'academic background', () => {
+      blank();
+      line('[ EDUCATION ]', 'section-head');
+      DATA.education.forEach(edu => {
+        blank();
+        line(`  <span class="clr-g font-bold">${esc(edu.institution)}</span>`);
+        line(`  <span class="clr-m">${esc(edu.degree)}</span>`);
+        line(`  <span class="clr-d">${esc(edu.period)}</span>`);
+      });
+      blank();
+    });
+
+    reg('projects', 'side projects & creations', () => {
+      blank();
+      line('[ FEATURED PROJECTS ]', 'section-head');
+      DATA.projects.forEach(p => {
+        blank();
+        line(`  <span class="clr-g font-bold">${esc(p.name)}</span> — <span class="clr-d">${esc(p.stack.join(' · '))}</span>`);
+        line(`  ${esc(p.desc)}`);
+        line(`  <span class="clr-c">Demo:</span> ${lnk(p.demo, p.demo)}`);
+      });
+      blank();
+    });
+
+    reg('skills', 'tech stack', () => {
+      blank();
+      line('[ TECHNICAL SKILLS ]', 'section-head');
+      Object.entries(DATA.skills).forEach(([cat, items]) => {
+        const id = 'skill-' + cat.toLowerCase().replace(/\s+/g, '-');
+        const randomWidth = Math.floor(Math.random() * 25) + 70; // 70-95%
+        line(`  <span class="clr-m">${esc(cat)}</span>`);
+        line(`    <span id="${id}" style="font-family:monospace">${barStr(0, '#4ADE80', 30)}</span>`);
+        line(`    <span class="clr-c">${items.map(esc).join('  ·  ')}</span>`);
+        blank();
+
+        setTimeout(() => {
+          const el = document.getElementById(id);
+          if (el) el.innerHTML = barStr(randomWidth, '#4ADE80', 30);
+        }, 100);
+      });
+      blank();
+    });
+
+    reg('contact', 'get in touch', () => {
+      blank();
+      line('[ CONTACT INFORMATION ]', 'section-head');
+      line(`  <span class="clr-m">Email:</span>      ${lnk('mailto:chinmayharish03@gmail.com', 'chinmayharish03@gmail.com')}`);
+      line(`  <span class="clr-m">Phone:</span>      <span class="clr-d">+91 9449124052</span>`);
+      line(`  <span class="clr-m">LinkedIn:</span>   ${lnk('https://linkedin.com/in/chinmayharish', 'in/chinmayharish')}`);
+      line(`  <span class="clr-m">GitHub:</span>     ${lnk('https://github.com/chinmayharish', 'github.com/chinmayharish')}`);
+      line(`  <span class="clr-m">Instagram:</span>  ${lnk('https://www.instagram.com/chinmeh_/', '@chinmeh_')}`);
+      blank();
+    });
+
+    reg('resume', 'view professional resume', () => {
+      line('<span class="clr-g">Opening resume in a new tab...</span>');
+      window.open(DATA.resume, '_blank');
+    });
+
+    reg('clear', 'clear terminal screen', () => { terminal.innerHTML = ''; });
+
+    // ─── Phase 16: TUI Hero Features ─────────────────────────────────────────
+
+    // ── 1. `top` — btop-style live career dashboard ──────────────────────────
+    reg('top', 'live career dashboard (btop style)', () => {
+      const overlay = document.getElementById('top-overlay');
+      overlay.classList.add('open');
+
+      const PROCS = [
+        { pid: '001', name: 'primenumbers-pm', cpu: 42, status: 'running' },
+        { pid: '002', name: 'uproot-startup', cpu: 18, status: 'scaling' },
+        { pid: '003', name: 'open-source-builds', cpu: 9, status: 'background' },
+        { pid: '004', name: 'learning-systems', cpu: 14, status: 'active' },
+        { pid: '005', name: 'coffee-process', cpu: 3, status: 'essential' },
+      ];
+
+      const METERS = [
+        { label: 'FOCUS', base: 66, color: '#4ADE80', desc: 'Active project contexts' },
+        { label: 'AVAIL', base: 34, color: '#f1fa8c', desc: 'Open to opportunities' },
+        { label: 'IDEAS', base: 82, color: '#8be9fd', desc: 'Ideas absorbed / week' },
+        { label: 'OUTPUT', base: 55, color: '#ff79c6', desc: 'Features shipped / week' },
+      ];
+
+      // Build static HTML
+      const metersEl = document.getElementById('top-meters');
+      metersEl.innerHTML = METERS.map((m, i) =>
+        `<div class="top-row">
+          <span class="top-label">${m.label}</span>
+          <span id="top-bar-${i}" style="font-family:monospace">${barStr(m.base, m.color)}</span>
+          <span class="top-pct" id="top-pct-${i}">${m.base}%</span>
+          <span class="clr-d" style="font-size:11px">${m.desc}</span>
+        </div>`
+      ).join('');
+
+      document.getElementById('top-proc-list').innerHTML = PROCS.map(p =>
+        `<div class="top-proc-row">
+          <span class="top-pid">${p.pid}</span>
+          <span>${p.name}</span>
+          <span class="top-cpu">${p.cpu}%</span>
+          <span class="top-status">${p.status}</span>
+        </div>`
+      ).join('');
+
+      const startMs = Date.now();
+      const jitter = setInterval(() => {
+        METERS.forEach((m, i) => {
+          const v = Math.max(5, Math.min(100, m.base + Math.round((Math.random() - 0.5) * 6)));
+          const bar = document.getElementById(`top-bar-${i}`);
+          const pct = document.getElementById(`top-pct-${i}`);
+          if (bar) bar.innerHTML = barStr(v, m.color);
+          if (pct) pct.textContent = v + '%';
+        });
+        const secs = Math.floor((Date.now() - startMs) / 1000);
+        const upEl = document.getElementById('top-uptime');
+        if (upEl) upEl.textContent = `uptime live: ${secs}s`;
+      }, 120);
+
+      // Exit handler
+      function onKey(e) {
+        if (e.key === 'q' || e.key === 'Escape') {
+          clearInterval(jitter);
+          overlay.classList.remove('open');
+          document.removeEventListener('keydown', onKey);
+          input.focus();
+        }
+      }
+      document.addEventListener('keydown', onKey);
+    });
+
+    // alias
+    reg('status', 'alias for top', () => COMMANDS['top']());
+
+    // ── 2. `git log` — lazygit career timeline ────────────────────────────────
+    reg('git log', 'interactive career commit graph', () => {
+      const overlay = document.getElementById('gitlog-overlay');
+      overlay.classList.add('open');
+
+      const COMMITS = [
+        {
+          hash: 'f3a9c11', ref: '(HEAD → master)',
+          author: 'Chinmay Harish', date: '2023 – Present',
+          msg: 'feat(career): Associate Product Manager @ Primenumbers Technologies',
+          details: [
+            '+ Led end-to-end lifecycle of Infiniteworks BI tool (80k+ opps)',
+            '+ Spearheaded Competitive Intelligence module',
+            '+ Redesigned signup reducing drop-offs by 30%',
+          ]
+        },
+        {
+          hash: '2bc04ad', ref: '',
+          author: 'Chinmay Harish', date: 'Mar – Jun 2023',
+          msg: 'feat(career): Data Analyst Intern @ Primenumbers Technologies',
+          details: [
+            '+ Automated SQL reporting dashboards for real-time visibility',
+            '+ A/B testing → 15% SQL query latency reduction',
+          ]
+        },
+        {
+          hash: 'a8d1f33', ref: '',
+          author: 'Chinmay Harish', date: '2023',
+          msg: 'feat(career): Student Intern @ BASF India',
+          details: [
+            '+ Worked in top-3 global Refinish Lab (Tata Motors, Mahindra)',
+            '+ Color-matched Tata Nexon EV coatings under strict QC',
+          ]
+        },
+        {
+          hash: '7c3b80e', ref: '',
+          author: 'Chinmay Harish', date: '2019 – 2023',
+          msg: 'fix(education): B.E. Chemical Engg — BMS College (CGPA 8.8/10)',
+          details: [
+            '+ Shipped Uproot, ILovePDF Clone, Spotify Visualizer',
+            '+ Led 6-person inter-collegiate technical project team',
+          ]
+        },
+        {
+          hash: 'b0rn!00', ref: '',
+          author: 'Chinmay Harish', date: 'Until 2017',
+          msg: 'feat(life): init — Delhi Public School',
+          details: ['+ Primary & Secondary schooling. Bugs introduced.']
+        },
+      ];
+
+      const listEl = document.getElementById('gitlog-list');
+      listEl.innerHTML = COMMITS.map((c, i) =>
+        `<div class="gl-commit" data-idx="${i}">
+          <span class="gl-pipe">*</span> <span class="gl-hash">${c.hash}</span>${c.ref ? ` <span class="gl-branch">${esc(c.ref)}</span>` : ''}<br>
+          <span class="gl-pipe">│</span> <span class="gl-author">Author:</span> <span style="color:var(--white)">${esc(c.author)}</span><br>
+          <span class="gl-pipe">│</span> <span class="gl-date">Date:   ${esc(c.date)}</span><br>
+          <span class="gl-pipe">│</span><br>
+          <span class="gl-msg">${esc(c.msg)}</span><br>
+          ${c.details.map(d => `<span class="gl-detail">${esc(d)}</span><br>`).join('')}
+        </div>`
+      ).join('');
+
+      let cursor = 0;
+      const rows = listEl.querySelectorAll('.gl-commit');
+      const highlight = () => rows.forEach((r, i) => r.classList.toggle('focused', i === cursor));
+      highlight();
+
+      function onKey(e) {
+        if (e.key === 'ArrowDown' || e.key === 'j') { cursor = Math.min(cursor + 1, COMMITS.length - 1); highlight(); rows[cursor].scrollIntoView({ block: 'nearest' }); }
+        else if (e.key === 'ArrowUp' || e.key === 'k') { cursor = Math.max(cursor - 1, 0); highlight(); rows[cursor].scrollIntoView({ block: 'nearest' }); }
+        else if (e.key === 'q' || e.key === 'Escape') {
+          overlay.classList.remove('open');
+          document.removeEventListener('keydown', onKey);
+          input.focus();
+        }
+      }
+      document.addEventListener('keydown', onKey);
+    });
+
+    // ── 3. `explore` — ranger 3-pane file manager ─────────────────────────────
+    reg('explore', 'ranger-style file manager (↑↓←→ or hjkl)', () => {
+      const overlay = document.getElementById('explore-overlay');
+      overlay.classList.add('open');
+
+      const FS = {
+        experience: {
+          'primenumbers-pm.md': {
+            title: 'Associate Product Manager',
+            lines: [
+              ['Company', 'Primenumbers Technologies'],
+              ['Period', '2023 – Present'],
+              ['Delivery', 'Infiniteworks BI — 80,000+ opportunities'],
+              ['Impact', 'Signup redesign cut drop-offs 30%'],
+              ['Module', 'Competitive Intelligence — finalist analysis'],
+            ]
+          },
+          'primenumbers-analyst.md': {
+            title: 'Data Analyst Intern',
+            lines: [
+              ['Period', 'Mar – Jun 2023'],
+              ['Work', 'SQL dashboards, A/B testing'],
+              ['Result', '15% query latency reduction'],
+            ]
+          },
+          'basf-intern.md': {
+            title: 'Student Intern — BASF India',
+            lines: [
+              ['Period', '2023'],
+              ['Lab', 'Top-3 global Refinish Lab'],
+              ['Client', 'Tata Motors, Mahindra'],
+            ]
+          },
+        },
+        projects: {
+          'uproot.md': {
+            title: 'Uproot',
+            lines: [
+              ['Desc', 'Agentic IDP powered by Gemini API'],
+              ['Stack', 'Gemini API · Next.js · TypeScript'],
+              ['Demo', 'uproot-app.vercel.app'],
+            ]
+          },
+          'cyberserpent.md': {
+            title: 'CyberSerpent',
+            lines: [
+              ['Desc', '8-bit cyberpunk Snake game'],
+              ['Stack', 'Canvas API · Vanilla JS'],
+              ['Demo', 'cyber-serpent-8bit.vercel.app'],
+            ]
+          },
+          'spotify-viz.md': {
+            title: 'Spotify Visualizer',
+            lines: [
+              ['Desc', 'Infinite canvas music viz via Three.js'],
+              ['Stack', 'Three.js · Spotify API · React'],
+              ['Demo', 'spotify-visualiser.vercel.app'],
+            ]
+          },
+          'ilovepdf.md': {
+            title: 'ILovePDF Clone',
+            lines: [
+              ['Desc', 'Full-stack PDF tool + Stripe'],
+              ['Stack', 'React · Node.js · Stripe'],
+              ['Demo', 'ilovepdf-clone-app.vercel.app'],
+            ]
+          },
+        },
+        skills: {
+          'product.md': {
+            title: 'Product Skills',
+            lines: [
+              ['Tools', 'Jira · Trello · Linear · Notion'],
+              ['Process', 'Roadmap · GTM Strategy · PRDs'],
+            ]
+          },
+          'analytics.md': {
+            title: 'Analytics',
+            lines: [
+              ['Tools', 'PostgreSQL · Mixpanel · Google Analytics'],
+              ['Output', 'SQL Dashboards · A/B Testing'],
+            ]
+          },
+          'design.md': {
+            title: 'Design',
+            lines: [
+              ['Tools', 'Figma · Whimsical · Canva'],
+              ['Work', 'Prototyping · Wireframing'],
+            ]
+          },
+        },
+        about: {
+          'about.md': {
+            title: 'About Chinmay',
+            lines: [
+              ['Name', 'Chinmay Harish'],
+              ['Role', 'Product Manager, Builder, Tinkerer'],
+              ['Location', 'Bengaluru, IN'],
+              ['Email', 'chinmayharish03@gmail.com'],
+              ['GitHub', 'github.com/ChinmayHarish'],
+            ]
+          },
+        },
+      };
+
+      const dirs = Object.keys(FS);
+      let focusPane = 0; // 0=dirs, 1=files, 2=preview (read-only)
+      let dirIdx = 0, fileIdx = 0;
+
+      const epDirs = document.getElementById('ep-dirs');
+      const epFiles = document.getElementById('ep-files');
+      const prevEl = document.getElementById('explore-preview');
+
+      function renderDirs() {
+        epDirs.innerHTML = `<div class="explore-pane-title">/</div>` +
+          dirs.map((d, i) =>
+            `<div class="explore-row${i === dirIdx ? ' selected' : ''}" data-d="${i}">
+              <span class="explore-icon">▶</span>${d}/</div>`
+          ).join('');
+      }
+
+      function renderFiles() {
+        const files = Object.keys(FS[dirs[dirIdx]]);
+        epFiles.innerHTML = `<div class="explore-pane-title">${dirs[dirIdx]}/</div>` +
+          files.map((f, i) =>
+            `<div class="explore-row${i === fileIdx ? ' selected' : ''}" data-f="${i}">
+              <span class="explore-icon" style="color:var(--dim)">·</span>${f}</div>`
+          ).join('');
+      }
+
+      function renderPreview() {
+        const files = Object.keys(FS[dirs[dirIdx]]);
+        const fileKey = files[fileIdx];
+        const data = FS[dirs[dirIdx]][fileKey];
+        prevEl.innerHTML = `<div style="color:var(--brand-gold);font-weight:700;margin-bottom:10px">${esc(data.title)}</div>` +
+          `<div style="border-bottom:1px solid #1a1a1a;margin-bottom:10px"></div>` +
+          data.lines.map(([k, v]) =>
+            `<div><span class="prev-key">${esc(k).padEnd(10, '\u00a0')}</span>  <span class="prev-val">${esc(v)}</span></div>`
+          ).join('');
+      }
+
+      function render() { renderDirs(); renderFiles(); renderPreview(); }
+      render();
+
+      function onKey(e) {
+        const files = Object.keys(FS[dirs[dirIdx]]);
+        if (e.key === 'ArrowDown' || e.key === 'j') {
+          if (focusPane === 0) { dirIdx = Math.min(dirIdx + 1, dirs.length - 1); fileIdx = 0; }
+          else if (focusPane === 1) { fileIdx = Math.min(fileIdx + 1, files.length - 1); }
+          render();
+        } else if (e.key === 'ArrowUp' || e.key === 'k') {
+          if (focusPane === 0) { dirIdx = Math.max(dirIdx - 1, 0); fileIdx = 0; }
+          else if (focusPane === 1) { fileIdx = Math.max(fileIdx - 1, 0); }
+          render();
+        } else if (e.key === 'ArrowRight' || e.key === 'l') {
+          focusPane = Math.min(focusPane + 1, 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'h') {
+          focusPane = Math.max(focusPane - 1, 0);
+        } else if (e.key === 'q' || e.key === 'Escape') {
+          overlay.classList.remove('open');
+          document.removeEventListener('keydown', onKey);
+          input.focus();
+        }
+      }
+      document.addEventListener('keydown', onKey);
+    });
+
+    // ── 4. `bored` — ASCII Snake easter egg ───────────────────────────────────
+    reg('bored', 'play ASCII snake (score ≥ 10 → surprise)', () => {
+      const overlay = document.getElementById('snake-overlay');
+      const boardEl = document.getElementById('snake-board');
+      const scoreEl = document.getElementById('snake-score');
+      const msgEl = document.getElementById('snake-msg');
+      const hirmeEl = document.getElementById('snake-hirme');
+
+      const W = 30, H = 16;
+      let snake, dir, food, score, gameInterval, started = false;
+
+      hirmeEl.style.display = 'none';
+      hirmeEl.innerHTML = '';
+      overlay.classList.add('open');
+
+      function pos(x, y) { return { x, y }; }
+      function eq(a, b) { return a.x === b.x && a.y === b.y; }
+      function rnd(max) { return Math.floor(Math.random() * max); }
+
+      function init() {
+        snake = [pos(15, 8), pos(14, 8), pos(13, 8)];
+        dir = { x: 1, y: 0 };
+        food = pos(rnd(W - 2) + 1, rnd(H - 2) + 1);
+        score = 0;
+        scoreEl.textContent = '0';
+        msgEl.textContent = 'ARROW KEYS TO MOVE';
+      }
+
+      function draw() {
+        const grid = Array.from({ length: H }, () => Array(W).fill(' '));
+        // border
+        for (let x = 0; x < W; x++) { grid[0][x] = '─'; grid[H - 1][x] = '─'; }
+        for (let y = 0; y < H; y++) { grid[y][0] = '│'; grid[y][W - 1] = '│'; }
+        grid[0][0] = '╔'; grid[0][W - 1] = '╗'; grid[H - 1][0] = '╚'; grid[H - 1][W - 1] = '╝';
+        // food
+        if (food.x > 0 && food.x < W - 1 && food.y > 0 && food.y < H - 1)
+          grid[food.y][food.x] = '✦';
+        // snake
+        snake.forEach((s, i) => { if (s.x > 0 && s.x < W - 1 && s.y > 0 && s.y < H - 1) grid[s.y][s.x] = i === 0 ? '●' : '○'; });
+        boardEl.textContent = grid.map(r => r.join('')).join('\n');
+      }
+
+      function step() {
+        const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+        // wall collision
+        if (head.x <= 0 || head.x >= W - 1 || head.y <= 0 || head.y >= H - 1) { gameOver(); return; }
+        // self collision
+        if (snake.some(s => eq(s, head))) { gameOver(); return; }
+        snake.unshift(head);
+        if (eq(head, food)) {
+          score++;
+          scoreEl.textContent = score;
+          if (score >= 10) { endWin(); return; }
+          food = pos(rnd(W - 2) + 1, rnd(H - 2) + 1);
+        } else {
+          snake.pop();
+        }
+        draw();
+      }
+
+      function gameOver() {
+        clearInterval(gameInterval);
+        msgEl.textContent = `GAME OVER — score ${score} — SPACE to restart`;
+        started = false;
+      }
+
+      function endWin() {
+        clearInterval(gameInterval);
+        boardEl.style.display = 'none';
+        hirmeEl.style.display = 'block';
+        hirmeEl.innerHTML = [
+          `<div class="ascii-art" style="font-size:11px;color:var(--brand-gold);text-shadow:0 0 12px var(--brand-glow)">`,
+          ` ██╗  ██╗██╗██████╗ ███████╗    ███╗   ███╗███████╗`,
+          ` ██║  ██║██║██╔══██╗██╔════╝    ████╗ ████║██╔════╝`,
+          ` ███████║██║██████╔╝█████╗      ██╔████╔██║█████╗  `,
+          ` ██╔══██║██║██╔══██╗██╔══╝      ██║╚██╔╝██║██╔══╝  `,
+          ` ██║  ██║██║██║  ██║███████╗    ██║ ╚═╝ ██║███████╗`,
+          ` ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═╝╚══════╝`,
+          `</div>`,
+          `<div style="margin-top:16px;color:var(--cyan)"><a href="mailto:chinmayharish03@gmail.com" style="color:var(--cyan)">→ chinmayharish03@gmail.com</a></div>`,
+          `<div style="color:var(--dim);margin-top:8px;font-size:12px">You found the easter egg. Score: ${score}</div>`,
+        ].join('\n');
+      }
+
+      init(); draw();
+
+      function onKeySnake(e) {
+        if (e.key === 'q' || e.key === 'Escape') {
+          clearInterval(gameInterval);
+          overlay.classList.remove('open');
+          boardEl.style.display = '';
+          hirmeEl.style.display = 'none';
+          document.removeEventListener('keydown', onKeySnake);
+          init();
+          input.focus();
+          return;
+        }
+        if (e.key === ' ') {
+          if (!started) {
+            started = true;
+            msgEl.textContent = 'ARROW KEYS TO MOVE';
+            gameInterval = setInterval(step, 150);
+          }
+          return;
+        }
+        if (!started) return;
+        const dirs = {
+          ArrowUp: { x: 0, y: -1 },
+          ArrowDown: { x: 0, y: 1 },
+          ArrowLeft: { x: -1, y: 0 },
+          ArrowRight: { x: 1, y: 0 },
+        };
+        if (dirs[e.key]) {
+          const nd = dirs[e.key];
+          // prevent 180 reversal
+          if (nd.x !== -dir.x || nd.y !== -dir.y) dir = nd;
+        }
+      }
+      document.addEventListener('keydown', onKeySnake);
+    });
+
+    // ── 5. `chat` — streaming TUI AI agent ────────────────────────────────────
+    reg('chat', 'AI chat about Chinmay (type /exit to quit)', () => {
+      const overlay = document.getElementById('chat-overlay');
+      const history = document.getElementById('chat-history');
+      const chatInp = document.getElementById('chat-input');
+      overlay.classList.add('open');
+      history.innerHTML = `<div class="chat-ai" style="display:block">Hi! Ask me anything about Chinmay — his work, projects, skills, or how to reach him. Type <span style="color:var(--cyan)">/exit</span> to quit.</div><br>`;
+      chatInp.focus();
+
+      // Structured knowledge base — zero hallucination
+      const KB = [
+        {
+          q: /siemens|primenumbers|work|experience|job|career|pm|product manager/i,
+          a: 'Chinmay is an Associate Product Manager at Primenumbers Technologies (2023–present). He led the full lifecycle of Infiniteworks, a BI tool aggregating 80k+ opportunities, defined roadmap and GTM strategy, and redesigned the signup flow — reducing drop-offs by 30%.'
+        },
+        {
+          q: /project|side|build|uproot|cyberserpent|spotify|tetris/i,
+          a: 'Key projects: **Uproot** (agentic IDP powered by Gemini API), **CyberSerpent** (8-bit cyberpunk Snake), **Spotify Visualizer** (infinite canvas via Three.js), **Neon Tetris** (P5.js). All live — type `projects` to explore them.'
+        },
+        {
+          q: /skill|tech|stack|tool|figma|sql|python|react/i,
+          a: 'Product: Jira, Linear, Notion, Roadmap Planning, GTM Strategy. Analytics: PostgreSQL, Mixpanel, Google Analytics, SQL. Design: Figma, Whimsical, Canva & prototyping. He codes in JS/TS, Python, and uses Next.js and React.'
+        },
+        {
+          q: /education|degree|college|bms|bmsce|university/i,
+          a: 'B.E. in Chemical Engineering from BMS College of Engineering, Bengaluru (2019–2023), CGPA 8.8/10. Schooled at Delhi Public School.'
+        },
+        {
+          q: /contact|email|phone|number|mobile|hire|recruit|reach|linkedin|github/i,
+          a: `Reach Chinmay via Email (chinmayharish03@gmail.com), Phone (+91 9449124052), or connect on LinkedIn (linkedin.com/in/chinmay-harish-03106t) and GitHub (github.com/ChinmayHarish). He's open to exciting PM / product engineering roles.`
+        },
+        {
+          q: /location|where|based|bengaluru|bangalore|india/i,
+          a: 'Chinmay is based in Bengaluru, India.'
+        },
+        {
+          q: /who|about|yourself|yourself|chinmay/i,
+          a: 'Chinmay Harish is a Product Manager, Builder, and Tinkerer based in Bengaluru. He bridges product strategy with technical depth — building AI-powered tools, shipping BI products, and making unusually good terminal portfolios.'
+        },
+      ];
+
+      async function typeout(el, text, delay = 16) {
+        el.textContent = '';
+        for (const ch of text) {
+          el.textContent += ch;
+          await new Promise(r => setTimeout(r, delay));
+          history.scrollTop = history.scrollHeight;
+        }
+      }
+
+      async function respond(q) {
+        const entry = KB.find(k => k.q.test(q));
+        const answer = entry ? entry.a : 'I only know about Chinmay! Try asking about his experience, projects, skills, or how to reach him.';
+        const aiEl = document.createElement('div');
+        aiEl.className = 'chat-ai';
+        aiEl.style.display = 'block';
+        history.appendChild(aiEl);
+        await typeout(aiEl, answer, 14);
+        const sp = document.createElement('br');
+        history.appendChild(sp);
+      }
+
+      function onChatKey(e) {
+        if (e.key !== 'Enter') return;
+        const q = chatInp.value.trim();
+        chatInp.value = '';
+        if (!q) return;
+        if (q === '/exit' || q === 'exit') {
+          overlay.classList.remove('open');
+          chatInp.removeEventListener('keydown', onChatKey);
+          input.focus();
+          return;
+        }
+        const youEl = document.createElement('div');
+        youEl.className = 'chat-you';
+        youEl.style.display = 'block';
+        youEl.textContent = q;
+        history.appendChild(youEl);
+        history.scrollTop = history.scrollHeight;
+        respond(q);
+      }
+      chatInp.addEventListener('keydown', onChatKey);
+    });
+
+    // ── 6. Ctrl+R — fzf fuzzy finder ──────────────────────────────────────────
+    (function initFzf() {
+      const overlay = document.getElementById('fzf-overlay');
+      // Build the fzf DOM inside the overlay
+      overlay.innerHTML = `
+        <div id="fzf-box">
+          <div id="fzf-input-row">
+            <span>›</span>
+            <input id="fzf-search" type="text" placeholder="Search commands, projects, skills…" autocomplete="off" spellcheck="false" />
+          </div>
+          <div id="fzf-list"></div>
+          <div id="fzf-hint">
+            <span><kbd>↑↓</kbd> navigate</span>
+            <span><kbd>↵</kbd> run</span>
+            <span><kbd>Esc</kbd> close</span>
+          </div>
+        </div>`;
+
+      const fzfInput = document.getElementById('fzf-search');
+      const fzfList = document.getElementById('fzf-list');
+
+      // Searchable entries: commands + top projects + skills
+      const buildEntries = () => {
+        const cmds = Object.entries(CMD_META).map(([cmd, desc]) => ({ cmd, desc, action: cmd }));
+        const projs = DATA.projects.map(p => ({ cmd: `open ${p.name.toLowerCase()}`, desc: p.desc, action: `projects` }));
+        const skills = Object.values(DATA.skills).flat().map(s => ({ cmd: s, desc: 'skill', action: 'skills' }));
+        return [...cmds, ...projs, ...skills];
+      };
+
+      let entries = [], fzfCursor = 0;
+
+      function renderFzf(query) {
+        const q = query.toLowerCase();
+        const filtered = entries.filter(e =>
+          e.cmd.toLowerCase().includes(q) || e.desc.toLowerCase().includes(q)
+        ).slice(0, 12);
+
+        fzfList.innerHTML = filtered.map((e, i) =>
+          `<div class="fzf-item${i === fzfCursor ? ' active' : ''}" data-idx="${i}" data-action="${esc(e.action)}">
+            <span class="fzf-cmd">${esc(e.cmd)}</span>
+            <span class="fzf-desc">${esc(e.desc)}</span>
+          </div>`
+        ).join('');
+
+        // click to run
+        fzfList.querySelectorAll('.fzf-item').forEach(el => {
+          el.addEventListener('click', () => { runAndClose(el.dataset.action); });
+        });
+        return filtered;
+      }
+
+      let filtered = [];
+
+      function openFzf() {
+        entries = buildEntries();
+        fzfCursor = 0;
+        fzfInput.value = '';
+        filtered = renderFzf('');
+        overlay.classList.add('open');
+        setTimeout(() => fzfInput.focus(), 20);
+      }
+
+      function closeFzf() {
+        overlay.classList.remove('open');
+        input.focus();
+      }
+
+      function runAndClose(action) {
+        closeFzf();
+        if (action) runCommand(action);
+      }
+
+      fzfInput.addEventListener('input', () => {
+        fzfCursor = 0;
+        filtered = renderFzf(fzfInput.value);
+      });
+
+      fzfInput.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { closeFzf(); return; }
+        if (e.key === 'ArrowDown') { e.preventDefault(); fzfCursor = Math.min(fzfCursor + 1, Math.min(filtered.length - 1, 11)); renderFzf(fzfInput.value); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); fzfCursor = Math.max(fzfCursor - 1, 0); renderFzf(fzfInput.value); }
+        else if (e.key === 'Enter') {
+          const active = fzfList.querySelector('.fzf-item.active');
+          if (active) runAndClose(active.dataset.action);
+          else closeFzf();
+        }
+      });
+
+      // Ctrl+R on the main input opens fzf
+      document.addEventListener('keydown', e => {
+        if (e.ctrlKey && e.key === 'r') { e.preventDefault(); openFzf(); }
+      });
+    })();
+
+    // ─────────────────────────────────────────────────────────────────────────
+    const CMD_LIST = Object.keys(COMMANDS);
+    window.globalRunCommand = (raw) => { runCommand(raw); };
+
+    function showBanner() {
+      const art = [
+        '   ██████╗██╗  ██╗██╗███╗   ██╗███╗   ███╗ █████╗ ██╗   ██╗',
+        '  ██╔════╝██║  ██║██║████╗  ██║████╗ ████║██╔══██╗╚██╗ ██╔╝',
+        '  ██║     ███████║██║██╔██╗ ██║██╔████╔██║███████║ ╚████╔╝ ',
+        '  ██║     ██╔══██║██║██║╚██╗██║██║╚██╔╝██║██╔══██║  ╚██╔╝  ',
+        '  ╚██████╗██║  ██║██║██║ ╚████║██║ ╚═╝ ██║██║  ██║   ██║   ',
+        '   ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   '
+      ];
+      art.forEach(row => { line(`<span class="ascii-art">${esc(row)}</span>`); });
+      blank();
+      COMMANDS.whoami();
+    }
+
+    async function bootSequence() {
+      const wait = (ms) => new Promise(r => setTimeout(r, ms));
+      const terminal = document.getElementById('terminal');
+
+      // -- V1 Style: Instant banner in glowing box, then identity typewriter --
+
+      // Brief dark flash (CRT power-on)
+      document.body.classList.add('booting');
+      await wait(120);
+      document.body.classList.remove('booting');
+
+      // ASCII art lines — direct render, no box
+      const art = [
+        '   ██████╗██╗  ██╗██╗███╗   ██╗███╗   ███╗ █████╗ ██╗   ██╗',
+        '  ██╔════╝██║  ██║██║████╗  ██║████╗ ████║██╔══██╗╚██╗ ██╔╝',
+        '  ██║     ███████║██║██╔██╗ ██║██╔████╔██║███████║ ╚████╔╝ ',
+        '  ██║     ██╔══██║██║██║╚██╗██║██║╚██╔╝██║██╔══██║  ╚██╔╝  ',
+        '  ╚██████╗██║  ██║██║██║ ╚████║██║ ╚═╝ ██║██║  ██║   ██║   ',
+        '   ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   '
+      ];
+
+      // Print each row directly into terminal
+      for (const row of art) {
+        const rowEl = document.createElement('div');
+        rowEl.className = 'output-line ascii-art';
+        rowEl.textContent = row;
+        terminal.appendChild(rowEl);
+      }
+
+      await wait(200);
+
+      // Typewriter-style reveal of identity card
+      const identityLines = [
+        `<span class="clr-gold font-bold">${esc(DATA.name)}</span>`,
+        `<span class="clr-d">${esc(DATA.role)}</span> <span class="clr-d">|</span> <span class="clr-d">${esc(DATA.location)}</span>`,
+        '',
+        `  ${lnk('mailto:' + DATA.email, DATA.email)} <span class="clr-d">·</span> ${lnk(DATA.github, 'GitHub')} <span class="clr-d">·</span> ${lnk(DATA.linkedin, 'LinkedIn')}`,
+        '',
+        `<span class="clr-d">Type </span><span class="clr-c">help</span><span class="clr-d"> to see available commands.</span>`
+      ];
+
+      for (const l of identityLines) {
+        const div = document.createElement('div');
+        div.className = 'output-line fade-in';
+        div.innerHTML = l;
+        terminal.appendChild(div);
+        terminal.scrollTop = terminal.scrollHeight;
+        await wait(80);
+      }
+
+      blank();
+      input.focus();
+    }
+
+    function runCommand(raw) {
+      const trimmed = raw.trim();
+      if (!trimmed) return;
+      history.push(trimmed);
+      histIdx = history.length;
+      printPrompt(trimmed);
+      const parts = trimmed.split(/\s+/);
+      // Support multi-word commands (e.g. "git log")
+      const twoWordCmd = parts.slice(0, 2).join(' ').toLowerCase();
+      const oneWordCmd = parts[0].toLowerCase();
+      const args = parts.slice(1).join(' ');
+      const handler = COMMANDS[twoWordCmd] || COMMANDS[oneWordCmd];
+      if (handler) handler(args);
+      else line(`<span class="clr-r">bash: ${esc(parts[0])}: command not found</span>`);
+    }
+
+    function updateSuggestion(val) {
+      if (!val) { suggBox.innerHTML = ''; return; }
+      const match = CMD_LIST.find(c => c.startsWith(val.toLowerCase()) && c !== val.toLowerCase());
+      suggBox.innerHTML = match ? `<span class="clr-d" style="background:rgba(255,255,255,0.03); padding:4px 12px; border:1px solid rgba(255,255,255,0.08); border-radius:4px; font-size:12px; backdrop-filter:blur(8px);">Tab ➞ <strong class='clr-g'>${esc(match)}</strong></span>` : '';
+    }
+
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const val = input.value; input.value = ''; updateSuggestion('');
+        runCommand(val);
+      } else if (e.key === 'Tab') {
+        e.preventDefault();
+        const val = input.value.trim().toLowerCase();
+        const match = CMD_LIST.find(c => c.startsWith(val));
+        if (match) { input.value = match; updateSuggestion(''); }
+      } else if (e.key === 'ArrowUp' && histIdx > 0) input.value = history[--histIdx];
+      else if (e.key === 'ArrowDown') {
+        if (histIdx < history.length - 1) input.value = history[++histIdx];
+        else { histIdx = history.length; input.value = ''; }
+      }
+    });
+
+    input.addEventListener('input', () => updateSuggestion(input.value.trim()));
+    document.querySelector('.window').addEventListener('click', () => input.focus());
+
+    bootSequence();
+  </script>
+</body>
+
+</html>

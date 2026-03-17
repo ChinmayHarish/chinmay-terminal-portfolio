@@ -1,0 +1,6 @@
+.DS_Store
+.agent/
+*.mp4
+*.mp3
+*.json
+/tmp/
