@@ -1676,31 +1676,31 @@
       // Structured knowledge base — zero hallucination
       const KB = [
         {
-          q: /siemens|primenumbers|work|experience|job|career|pm|product manager/i,
-          a: 'Chinmay is an Associate Product Manager at Primenumbers Technologies (2023–present). He led the full lifecycle of Infiniteworks, a BI tool aggregating 80k+ opportunities, defined roadmap and GTM strategy, and redesigned the signup flow — reducing drop-offs by 30%.'
+          q: /current|doing|active|now|primenumbers|work|experience|job|career|pm|product manager|role|position/i,
+          a: 'Chinmay is currently an Associate Product Manager at Primenumbers Technologies (2023–present). He led the full lifecycle of Infiniteworks, a BI tool aggregating 80k+ opportunities, handles roadmap/GTM strategy, and recently redesigned the signup flow — reducing drop-offs by 30%.'
         },
         {
-          q: /project|side|build|uproot|cyberserpent|spotify|tetris/i,
+          q: /project|side|build|uproot|cyberserpent|spotify|tetris|make|create/i,
           a: 'Key projects: **Uproot** (agentic IDP powered by Gemini API), **CyberSerpent** (8-bit cyberpunk Snake), **Spotify Visualizer** (infinite canvas via Three.js), **Neon Tetris** (P5.js). All live — type `projects` to explore them.'
         },
         {
-          q: /skill|tech|stack|tool|figma|sql|python|react/i,
+          q: /skill|tech|stack|tool|figma|sql|python|react|code|language/i,
           a: 'Product: Jira, Linear, Notion, Roadmap Planning, GTM Strategy. Analytics: PostgreSQL, Mixpanel, Google Analytics, SQL. Design: Figma, Whimsical, Canva & prototyping. He codes in JS/TS, Python, and uses Next.js and React.'
         },
         {
-          q: /education|degree|college|bms|bmsce|university/i,
+          q: /education|degree|college|bms|bmsce|university|study|school/i,
           a: 'B.E. in Chemical Engineering from BMS College of Engineering, Bengaluru (2019–2023), CGPA 8.8/10. Schooled at Delhi Public School.'
         },
         {
-          q: /contact|email|phone|number|mobile|hire|recruit|reach|linkedin|github/i,
+          q: /contact|email|phone|number|mobile|hire|recruit|reach|linkedin|github|call|text|connect/i,
           a: `Reach Chinmay via Email (chinmayharish03@gmail.com), Phone (+91 9449124052), or connect on LinkedIn (linkedin.com/in/chinmay-harish-03106t) and GitHub (github.com/ChinmayHarish). He's open to exciting PM / product engineering roles.`
         },
         {
-          q: /location|where|based|bengaluru|bangalore|india/i,
+          q: /location|where|based|bengaluru|bangalore|india|live/i,
           a: 'Chinmay is based in Bengaluru, India.'
         },
         {
-          q: /who|about|yourself|yourself|chinmay/i,
+          q: /who|about|yourself|chinmay|background|story/i,
           a: 'Chinmay Harish is a Product Manager, Builder, and Tinkerer based in Bengaluru. He bridges product strategy with technical depth — building AI-powered tools, shipping BI products, and making unusually good terminal portfolios.'
         },
       ];
@@ -1715,8 +1715,16 @@
       }
 
       async function respond(q) {
-        const entry = KB.find(k => k.q.test(q));
-        const answer = entry ? entry.a : 'I only know about Chinmay! Try asking about his experience, projects, skills, or how to reach him.';
+        // Try strict regex match first
+        let entry = KB.find(k => k.q.test(q));
+
+        // If no match, try word-based heuristic
+        if (!entry) {
+          const words = q.toLowerCase().split(/\s+/);
+          entry = KB.find(k => words.some(w => w.length > 2 && k.q.test(w)));
+        }
+
+        const answer = entry ? entry.a : "I only know about Chinmay's career! Try asking about his experience, projects, skills, or contact info.";
         const aiEl = document.createElement('div');
         aiEl.className = 'chat-ai';
         aiEl.style.display = 'block';
