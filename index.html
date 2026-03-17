@@ -1673,47 +1673,57 @@
       history.innerHTML = `<div class="chat-ai" style="display:block">Hi! Ask me anything about Chinmay — his work, projects, skills, or how to reach him. Type <span style="color:var(--cyan)">/exit</span> to quit.</div><br>`;
       chatInp.focus();
 
-      // Structured knowledge base — zero hallucination
+      // High-precision weighted knowledge base
       const KB = [
         {
-          q: /how many years|total experience|years of experience|how long/i,
+          keys: ['years', 'long', 'total', 'duration', 'experience'],
+          weight: { 'years': 50, 'long': 30, 'total': 20 },
           a: 'Chinmay has approximately 3 years of professional experience, including 2.7+ years as an Associate Product Manager and 4 months as a Data Analyst Intern.'
         },
         {
-          q: /achievements|impact|success|results|metrics/i,
+          keys: ['impact', 'achievements', 'success', 'results', 'metrics', 'reduce', 'growth'],
+          weight: { '80k': 50, '30%': 50, 'impact': 30, 'achievements': 30, 'metrics': 30 },
           a: 'Major impacts: Lead 0-to-1 launch of Infiniteworks (80k+ ops), reduced signup drop-offs by 30%, reactivated leads for a ₹2 Cr revenue pipeline, and hit 60% attrition reduction on Palladium.'
         },
         {
-          q: /why hire|qualities|strengths|expert/i,
-          a: 'Chinmay is an expert at bridging product strategy with technical depth. He excels at zero-to-one product delivery, data-driven funnel optimization, and building unusually responsive TUI portfolios.'
+          keys: ['why', 'hire', 'qualities', 'strengths', 'expert', 'different', 'unique'],
+          weight: { 'hire': 50, 'why': 20, 'unique': 30, 'expert': 30 },
+          a: 'Chinmay is an expert at bridging product strategy with technical depth. He excels at zero-to-one product delivery, data-driven funnel optimization, and building high-performance TUI experiences.'
         },
         {
-          q: /current|doing|active|now|primenumbers|work|experience|job|career|pm|product manager|role|position/i,
-          a: 'Chinmay is currently an Associate Product Manager at Primenumbers Technologies (2023–present). He led the full lifecycle of Infiniteworks, a BI tool aggregating 80k+ opportunities, handles roadmap/GTM strategy, and recently redesigned the signup flow.'
+          keys: ['current', 'doing', 'active', 'now', 'primenumbers', 'work', 'job', 'pm', 'role', 'position'],
+          weight: { 'current': 40, 'now': 30, 'doing': 30, 'primenumbers': 50 },
+          a: 'Chinmay is currently an Associate Product Manager at Primenumbers Technologies (2023–present). He leads the Infiniteworks roadmap/GTM strategy and handles end-to-end product delivery.'
         },
         {
-          q: /project|side|build|uproot|cyberserpent|spotify|tetris|make|create/i,
-          a: 'Key projects: **Uproot** (agentic IDP powered by Gemini), **CyberSerpent** (8-bit cyberpunk Snake), **Spotify Visualizer** (infinite Three.js canvas), **Neon Tetris** (P5.js). type `projects` to learn more.'
+          keys: ['project', 'side', 'build', 'uproot', 'cyberserpent', 'spotify', 'tetris', 'make', 'create'],
+          weight: { 'uproot': 50, 'snake': 40, 'spotify': 40, 'tetris': 40, 'projects': 30 },
+          a: 'Key projects: **Uproot** (agentic IDP), **CyberSerpent** (cyberpunk Snake), **Spotify Visualizer** (Three.js), **Neon Tetris** (P5.js). type `projects` to learn more.'
         },
         {
-          q: /skill|tech|stack|tool|figma|sql|python|react|code|language/i,
-          a: 'Tools: Jira, Linear, Notion. Analytics: PostgreSQL, Mixpanel, SQL. Design: Figma, Whimsical. Engineering: JS/TS, Python, Next.js, and React.'
+          keys: ['skill', 'tech', 'stack', 'tool', 'figma', 'sql', 'python', 'react', 'code', 'language'],
+          weight: { 'stack': 40, 'code': 30, 'python': 30, 'react': 30, 'tools': 30 },
+          a: 'Tools: Jira, Linear, Notion. Analytics: PostgreSQL, Mixpanel, SQL. Design: Figma. Engineering: JS/TS, Python, Next.js, and React.'
         },
         {
-          q: /education|degree|college|bms|bmsce|university|study|school/i,
+          keys: ['education', 'degree', 'college', 'bms', 'bmsce', 'university', 'study', 'school'],
+          weight: { 'degree': 50, 'college': 40, 'bms': 50, 'study': 30 },
           a: 'B.E. in Chemical Engineering from BMS College of Engineering, Bengaluru (2019–2023), CGPA 8.8/10.'
         },
         {
-          q: /contact|email|phone|number|mobile|hire|recruit|reach|linkedin|github|call|text|connect/i,
+          keys: ['contact', 'email', 'phone', 'number', 'mobile', 'reach', 'linkedin', 'github', 'connect'],
+          weight: { 'phone': 50, 'number': 40, 'email': 40, 'reach': 30, 'contact': 30 },
           a: `Reach Chinmay via Email (chinmayharish03@gmail.com), Phone (+91 9449124052), or connect on LinkedIn (linkedin.com/in/chinmay-harish-03106t).`
         },
         {
-          q: /location|where|based|bengaluru|bangalore|india|live/i,
+          keys: ['location', 'where', 'based', 'bengaluru', 'bangalore', 'india', 'live'],
+          weight: { 'location': 50, 'where': 30, 'live': 30, 'bengaluru': 40 },
           a: 'Chinmay is based in Bengaluru, India.'
         },
         {
-          q: /who|about|yourself|chinmay|background|story/i,
-          a: 'Chinmay Harish is a Product Manager, Builder, and Tinkerer based in Bengaluru. He specializes in building AI-powered tools and high-performance product experiences.'
+          keys: ['who', 'about', 'yourself', 'chinmay', 'background', 'story'],
+          weight: { 'who': 40, 'about': 30, 'yourself': 40, 'background': 30 },
+          a: 'Chinmay Harish is a Product Manager and Builder based in Bengaluru. He specializes in building AI-powered tools and high-performance product experiences.'
         },
       ];
 
@@ -1732,25 +1742,36 @@
         if (isTyping) return;
         isTyping = true;
 
-        // Scoring Engine
-        let bestEntry = null;
-        let maxScore = 0;
+        const cleanQ = q.toLowerCase().replace(/[^a-z0-9 ]/g, '');
+        const words = cleanQ.split(/\s+/).filter(w => w.length > 2);
+
+        let bestMatch = null;
+        let highestScore = 0;
 
         KB.forEach(entry => {
           let score = 0;
-          if (entry.q.test(q)) score += 15; // Regex priority
 
-          const words = q.toLowerCase().split(/\s+/);
-          const matches = words.filter(w => w.length > 2 && entry.q.test(w));
-          score += matches.length * 5; // Word density priority
+          // 1. Keyword check
+          words.forEach(word => {
+            if (entry.keys.includes(word)) {
+              score += 10;
+              // 2. Bonus for high-weight terms
+              if (entry.weight && entry.weight[word]) {
+                score += entry.weight[word];
+              }
+            }
+          });
 
-          if (score > maxScore) {
-            maxScore = score;
-            bestEntry = entry;
+          // 3. Exact phrase match bonus
+          if (cleanQ.includes(entry.keys.join(' '))) score += 20;
+
+          if (score > highestScore) {
+            highestScore = score;
+            bestMatch = entry;
           }
         });
 
-        const answer = (maxScore > 5) ? bestEntry.a : "I only know about Chinmay's career! Try asking about his experience, projects, or contact info.";
+        const answer = (highestScore > 15) ? bestMatch.a : "I only know about Chinmay's career! Try asking about his experience, projects, or contact info.";
 
         const aiEl = document.createElement('div');
         aiEl.className = 'chat-ai';
