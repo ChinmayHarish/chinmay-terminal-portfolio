@@ -1777,7 +1777,8 @@
           input.focus();
           return;
         }
-        if (e.key === ' ') {
+        if (e.key === ' ' || e.code === 'Space') {
+          e.preventDefault(); // prevent scrolling
           if (!started) {
             started = true;
             msgEl.textContent = 'ARROW KEYS TO MOVE';
