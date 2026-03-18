@@ -1494,20 +1494,21 @@
       document.addEventListener('keydown', onKey);
     });
 
-    function closeOverlay(id, isSnake = false) {
+    window.closeOverlay = function (id, isSnake = false) {
       if (isSnake) {
-        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'q' }));
+        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'q', bubbles: true }));
       } else {
         const el = document.getElementById(id);
-        el.classList.remove('open');
-        if (id.includes('chat')) window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-        document.getElementById('cmd-input').focus();
+        if (el) el.classList.remove('open');
+        if (id.includes('chat')) window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+        const input = document.getElementById('cmd-input');
+        if (input) input.focus();
       }
-    }
+    };
 
-    function setSnakeDir(k) {
+    window.setSnakeDir = function (k) {
       window.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true }));
-    }
+    };
 
     // ── 3. `explore` — ranger 3-pane file manager ─────────────────────────────
     reg('explore', 'ranger-style file manager (↑↓←→ or hjkl)', () => {
