@@ -475,6 +475,49 @@
         grid-template-columns: 40px 1fr 40px 60px;
         font-size: 10px;
       }
+
+      /* Mobile Close Button */
+      .mobile-close-btn {
+        display: block !important;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--white);
+        padding: 5px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        z-index: 1000;
+      }
+
+      /* Snake Gamepad */
+      #snake-gamepad {
+        display: grid !important;
+        grid-template-areas: ". up ." "left . right" ". down .";
+        gap: 10px;
+        position: absolute;
+        bottom: 40px;
+        right: 20px;
+      }
+
+      #snake-gamepad button {
+        width: 50px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--dim);
+        color: var(--white);
+        border-radius: 8px;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    .mobile-close-btn,
+    #snake-gamepad {
+      display: none;
     }
 
     .animate-in {
@@ -1023,6 +1066,7 @@
 
     <!-- explore: ranger 3-pane -->
     <div id="explore-overlay" aria-label="File explorer">
+      <button class="mobile-close-btn" onclick="closeOverlay('explore-overlay')">EXIT</button>
       <div id="explore-panes">
         <div class="explore-pane" id="ep-dirs"></div>
         <div class="explore-pane" id="ep-files"></div>
@@ -1039,6 +1083,7 @@
 
     <!-- top: btop dashboard -->
     <div id="top-overlay" aria-label="System monitor">
+      <button class="mobile-close-btn" onclick="closeOverlay('top-overlay')">EXIT</button>
       <div id="top-header">
         <span>CHINMAY-OS — PROCESS MONITOR</span>
         <span id="top-uptime"></span>
@@ -1065,8 +1110,15 @@
 
     <!-- snake game -->
     <div id="snake-overlay" aria-label="Snake game">
+      <button class="mobile-close-btn" onclick="closeOverlay('snake-overlay', true)">EXIT</button>
       <div id="snake-hirme"></div>
       <div id="snake-board"></div>
+      <div id="snake-gamepad">
+        <button style="grid-area:up" onclick="setSnakeDir('ArrowUp')">↑</button>
+        <button style="grid-area:left" onclick="setSnakeDir('ArrowLeft')">←</button>
+        <button style="grid-area:right" onclick="setSnakeDir('ArrowRight')">→</button>
+        <button style="grid-area:down" onclick="setSnakeDir('ArrowDown')">↓</button>
+      </div>
       <div id="snake-hud">
         <span>SCORE: <span id="snake-score">0</span></span>
         <span id="snake-msg">PRESS SPACE TO START</span>
@@ -1078,6 +1130,7 @@
 
     <!-- chat -->
     <div id="chat-overlay" aria-label="AI chat">
+      <button class="mobile-close-btn" onclick="closeOverlay('chat-overlay')">EXIT</button>
       <div id="chat-history"></div>
       <div id="chat-hint">/exit to quit · powered by structured knowledge</div>
       <div id="chat-input-row">
@@ -1438,6 +1491,21 @@
       document.addEventListener('keydown', onKey);
     });
 
+    function closeOverlay(id, isSnake = false) {
+      if (isSnake) {
+        window.dispatchEvent(new KeyboardEvent('keydown', { key: 'q' }));
+      } else {
+        const el = document.getElementById(id);
+        el.classList.remove('open');
+        if (id.includes('chat')) window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+        document.getElementById('cmd-input').focus();
+      }
+    }
+
+    function setSnakeDir(k) {
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: k }));
+    }
+
     // ── 3. `explore` — ranger 3-pane file manager ─────────────────────────────
     reg('explore', 'ranger-style file manager (↑↓←→ or hjkl)', () => {
       const overlay = document.getElementById('explore-overlay');
@@ -1727,6 +1795,23 @@
         }
       }
       document.addEventListener('keydown', onKeySnake);
+
+      // Swipe support for mobile
+      let touchStartX = 0, touchStartY = 0;
+      overlay.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+      }, { passive: true });
+
+      overlay.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].screenX - touchStartX;
+        const dy = e.changedTouches[0].screenY - touchStartY;
+        if (Math.abs(dx) > Math.abs(dy)) {
+          if (Math.abs(dx) > 30) setSnakeDir(dx > 0 ? 'ArrowRight' : 'ArrowLeft');
+        } else {
+          if (Math.abs(dy) > 30) setSnakeDir(dy > 0 ? 'ArrowDown' : 'ArrowUp');
+        }
+      }, { passive: true });
     });
 
     // ── 5. `chat` — streaming TUI AI agent ────────────────────────────────────
