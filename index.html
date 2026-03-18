@@ -405,13 +405,75 @@
       display: block;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       body {
-        padding: 10px;
+        padding: 5px;
+      }
+
+      .window {
+        border-radius: 0;
+        height: 100vh;
+        max-height: -webkit-fill-available;
+      }
+
+      .titlebar {
+        padding: 6px 12px;
       }
 
       .terminal {
-        padding: 12px;
+        padding: 10px;
+        min-height: auto;
+        flex: 1;
+        font-size: 13px;
+      }
+
+      .ascii-art {
+        font-size: 8px;
+        /* High-precision shrink for mobile */
+        letter-spacing: -1px;
+      }
+
+      .input-row {
+        padding: 10px 10px 20px;
+      }
+
+      #suggestion {
+        display: none;
+        /* Suggestions too noisy for mobile */
+      }
+
+      /* Full-Screen Overlays for Mobile UX */
+      #chat-overlay,
+      #fzf-overlay,
+      #top-overlay,
+      #gitlog-overlay,
+      #snake-overlay {
+        position: fixed !important;
+        inset: 0 !important;
+        border-radius: 0;
+      }
+
+      #explore-panes {
+        grid-template-columns: 1fr;
+        /* Single pane on mobile */
+      }
+
+      .explore-pane:not(.selected-pane) {
+        display: none;
+      }
+
+      #top-header {
+        font-size: 10px;
+      }
+
+      .top-bar-track {
+        width: 100px;
+      }
+
+      .top-proc-head,
+      .top-proc-row {
+        grid-template-columns: 40px 1fr 40px 60px;
+        font-size: 10px;
       }
     }
 
@@ -1381,6 +1443,9 @@
       const overlay = document.getElementById('explore-overlay');
       overlay.classList.add('open');
 
+      // Mobile adaptive class
+      if (window.innerWidth <= 768) overlay.classList.add('mobile-mode');
+
       const FS = {
         experience: {
           'primenumbers-pm.md': {
@@ -2019,6 +2084,13 @@
 
     input.addEventListener('input', () => updateSuggestion(input.value.trim()));
     document.querySelector('.window').addEventListener('click', () => input.focus());
+
+    // Mobile: Auto-focus on tap anywhere
+    document.addEventListener('touchstart', () => {
+      if (document.activeElement !== input && document.activeElement !== chatInp && document.activeElement !== document.getElementById('fzf-search')) {
+        input.focus();
+      }
+    }, { passive: true });
 
     bootSequence();
   </script>
