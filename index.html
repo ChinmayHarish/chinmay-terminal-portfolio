@@ -1047,6 +1047,75 @@
       font-size: 11px;
       color: var(--dim);
     }
+
+    /* ytm player */
+    #ytm-overlay {
+      display: none;
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      z-index: 200;
+      flex-direction: column;
+    }
+
+    #ytm-overlay.open {
+      display: flex;
+    }
+
+    .ytm-box {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      width: 380px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #ytm-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--brand-gold);
+      font-weight: 700;
+    }
+
+    #ytm-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ytm-progress-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--dim);
+    }
+
+    #ytm-progress-bar {
+      flex: 1;
+      font-family: var(--font);
+      letter-spacing: -0.5px;
+      color: var(--cyan);
+      font-size: 14px;
+    }
+
+    #ytm-controls-hint {
+      font-size: 11px;
+      color: var(--dim);
+      display: flex;
+      gap: 12px;
+    }
   </style>
 </head>
 
@@ -1141,6 +1210,36 @@
         <input id="chat-input" type="text" autocomplete="off" spellcheck="false"
           placeholder="Ask me anything about Chinmay…" />
       </div>
+    </div>
+
+    <!-- ytm player -->
+    <div id="ytm-overlay" aria-label="YTM Player Widget">
+      <div class="ytm-box">
+        <div id="ytm-header" style="align-items:center;">
+          <span><a href="https://github.com/peternaame-boop/ytm-player" target="_blank"
+              style="color:var(--brand-gold);text-decoration:none;">[Tribute: ytm-player]</a></span>
+          <div style="display:flex;gap:12px;">
+            <span id="ytm-status" class="clr-c">[ LOADING ]</span>
+            <button style="background:none;border:none;color:var(--dim);cursor:pointer;font-family:var(--font);"
+              onclick="closeOverlayYtm()">[x]</button>
+          </div>
+        </div>
+        <div id="ytm-title">Loading...</div>
+        <div class="ytm-progress-container">
+          <span id="ytm-time-current">00:00</span>
+          <span id="ytm-progress-bar"></span>
+          <span id="ytm-time-total">00:00</span>
+        </div>
+        <div
+          style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #1a1a1a; padding-top:10px;">
+          <div id="ytm-eq" class="clr-g" style="font-size:12px; letter-spacing:1px; width:70px;">▃ ▅ █ ▇ ▅</div>
+          <div id="ytm-controls-hint">
+            <a class="clickable" onclick="if(ytPlayer && ytPlayer.playVideo) ytPlayer.playVideo()">[► Play]</a>
+            <a class="clickable" onclick="if(ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo()">[║ Pause]</a>
+          </div>
+        </div>
+      </div>
+      <div id="yt-player-container" style="display: none;"></div>
     </div>
 
     <div id="suggestion"></div>
@@ -1343,6 +1442,137 @@
 
     reg('clear', 'clear terminal screen', () => { terminal.innerHTML = ''; });
 
+    // ─── TuiStudio Theming ───────────────────────────────────────────────────
+    const THEMES = {
+      dracula: { bg: '#282a36', bg2: '#44475a', white: '#f8f8f2', border: '#6272a4', cyan: '#8be9fd', green: '#50fa7b', yellow: '#f1fa8c', magenta: '#ff79c6', dim: '#6272a4', brandGold: '#ffb86c' },
+      nord: { bg: '#2e3440', bg2: '#3b4252', white: '#d8dee9', border: '#4c566a', cyan: '#88c0d0', green: '#a3be8c', yellow: '#ebcb8b', magenta: '#b48ead', dim: '#d8dee9', brandGold: '#d08770' },
+      gruvbox: { bg: '#282828', bg2: '#3c3836', white: '#ebdbb2', border: '#504945', cyan: '#83a598', green: '#b8bb26', yellow: '#fabd2f', magenta: '#d3869b', dim: '#a89984', brandGold: '#fe8019' },
+      default: { bg: '#0A0A0B', bg2: '#121214', white: '#E4E4E7', border: '#27272a', cyan: '#4ADE80', green: '#E4E4E7', yellow: '#E4E4E7', magenta: '#A1A1AA', dim: '#52525B', brandGold: '#DA7756' }
+    };
+
+    reg('theme', 'switch TuiStudio themes (dracula, nord, gruvbox, default)', (arg) => {
+      const themeName = arg.trim().toLowerCase() || 'default';
+      const theme = THEMES[themeName];
+      if (!theme) {
+        line(`<span class="clr-r">Theme not found. Available: dracula, nord, gruvbox, default</span>`);
+        return;
+      }
+      const root = document.documentElement;
+      root.style.setProperty('--bg', theme.bg);
+      root.style.setProperty('--bg2', theme.bg2);
+      root.style.setProperty('--white', theme.white);
+      root.style.setProperty('--border', theme.border);
+      root.style.setProperty('--cyan', theme.cyan);
+      root.style.setProperty('--green', theme.green);
+      root.style.setProperty('--yellow', theme.yellow);
+      root.style.setProperty('--magenta', theme.magenta);
+      root.style.setProperty('--dim', theme.dim);
+      root.style.setProperty('--brand-gold', theme.brandGold);
+      line(`<span class="clr-g">Theme switched to ${themeName}</span>`);
+    });
+
+    // ─── Claude Code Buddy (Tamagotchi) ──────────────────────────────────────
+    const ASCII_BUDDY = {
+      happy: `  \\  /\n ( ^.^ )\n c(")(")`,
+      sad: `  \\  /\n ( -.- )\n c(")(")`,
+      sleepy: `   zZ\n  \\  /\n ( -.- )\n c(")(")`
+    };
+
+    let buddyState = null;
+    try { buddyState = JSON.parse(localStorage.getItem('buddyState')); } catch (e) { }
+    if (!buddyState) {
+      buddyState = { hunger: 50, happiness: 50, energy: 100, lastInteraction: Date.now(), name: 'Tengu' };
+    }
+
+    function saveBuddy() {
+      localStorage.setItem('buddyState', JSON.stringify(buddyState));
+    }
+
+    function updateBuddyStats() {
+      const now = Date.now();
+      const hoursPassed = (now - buddyState.lastInteraction) / (1000 * 60 * 60);
+      if (hoursPassed > 0.05) {
+        const decay = Math.floor(hoursPassed * 12);
+        buddyState.hunger = Math.max(0, buddyState.hunger - decay);
+        buddyState.happiness = Math.max(0, buddyState.happiness - decay);
+        buddyState.energy = Math.max(0, buddyState.energy - (decay / 2));
+        buddyState.lastInteraction = now;
+        saveBuddy();
+      }
+    }
+
+    reg('buddy', 'interact with terminal companion (feed, play, sleep)', (arg) => {
+      updateBuddyStats();
+      const args = arg.trim().toLowerCase().split(' ');
+      const action = args[0];
+
+      if (action === 'feed') {
+        buddyState.hunger = Math.min(100, buddyState.hunger + 30);
+        buddyState.lastInteraction = Date.now();
+        saveBuddy();
+        line(`<span class="clr-g">Fed ${buddyState.name}! Fullness increased.</span>`);
+        return;
+      }
+      if (action === 'play') {
+        buddyState.happiness = Math.min(100, buddyState.happiness + 30);
+        buddyState.energy = Math.max(0, buddyState.energy - 15);
+        buddyState.hunger = Math.max(0, buddyState.hunger - 10);
+        buddyState.lastInteraction = Date.now();
+        saveBuddy();
+        line(`<span class="clr-c">Played with ${buddyState.name}! Happiness increased, energy decreased.</span>`);
+        return;
+      }
+      if (action === 'sleep') {
+        buddyState.energy = Math.min(100, buddyState.energy + 40);
+        buddyState.lastInteraction = Date.now();
+        saveBuddy();
+        line(`<span class="clr-m">${buddyState.name} is resting... Energy increased.</span>`);
+        return;
+      }
+
+      let face = ASCII_BUDDY.happy;
+      if (buddyState.energy < 30) face = ASCII_BUDDY.sleepy;
+      else if (buddyState.happiness < 40 || buddyState.hunger < 40) face = ASCII_BUDDY.sad;
+
+      blank();
+      line(`<span class="clr-d">╭─────────────────────────╮</span>`);
+      line(`<span class="clr-d">│ </span><span class="clr-gold font-bold">${buddyState.name.padEnd(23)}</span><span class="clr-d"> │</span>`);
+      const faceLines = face.split('\\n');
+      faceLines.forEach(l => {
+        line(`<span class="clr-d">│ </span><span class="clr-white">${l.padEnd(23)}</span><span class="clr-d"> │</span>`);
+      });
+      line(`<span class="clr-d">├─────────────────────────┤</span>`);
+      line(`<span class="clr-d">│ </span><span class="clr-y">FULL:  </span> ${barStr(buddyState.hunger, '#f1fa8c', 10)}     <span class="clr-d">│</span>`);
+      line(`<span class="clr-d">│ </span><span class="clr-c">HAPPY: </span> ${barStr(buddyState.happiness, '#8be9fd', 10)}     <span class="clr-d">│</span>`);
+      line(`<span class="clr-d">│ </span><span class="clr-m">ENERGY:</span> ${barStr(buddyState.energy, '#ff79c6', 10)}     <span class="clr-d">│</span>`);
+      line(`<span class="clr-d">╰─────────────────────────╯</span>`);
+      line(`  <span class="clr-d">actions: buddy feed | buddy play | buddy sleep</span>`);
+      blank();
+    });
+
+    reg('dashboard', 'open TuiStudio-inspired multi-pane terminal dashboard view', () => {
+      terminal.innerHTML = '';
+      blank();
+      updateBuddyStats();
+      const statusTitle = "SYSTEM STATUS".padEnd(22);
+      const buddyTitle = "COMPANION STATUS".padEnd(23);
+      line(`<span class="clr-c">╭────────────────────────┬─────────────────────────╮</span>`);
+      line(`<span class="clr-c">│</span> <span class="clr-gold font-bold">${statusTitle}</span> <span class="clr-c">│</span> <span class="clr-gold font-bold">${buddyTitle}</span> <span class="clr-c">│</span>`);
+      line(`<span class="clr-c">├────────────────────────┼─────────────────────────┤</span>`);
+
+      const uptimeStr = (`UPTIME: ${Math.floor(performance.now() / 1000)}s`).padEnd(22);
+      const buddyName = (`NAME: ${buddyState ? buddyState.name : 'Tengu'}`).padEnd(23);
+      line(`<span class="clr-c">│</span> <span class="clr-white">${uptimeStr}</span> <span class="clr-c">│</span> <span class="clr-white">${buddyName}</span> <span class="clr-c">│</span>`);
+
+      const memStr = ("MEM: NORMAL").padEnd(22);
+      const buddyHappy = (`HAPPY: ${buddyState ? buddyState.happiness : '0'}%`).padEnd(23);
+      line(`<span class="clr-c">│</span> <span class="clr-white">${memStr}</span> <span class="clr-c">│</span> <span class="clr-white">${buddyHappy}</span> <span class="clr-c">│</span>`);
+
+      line(`<span class="clr-c">╰────────────────────────┴─────────────────────────╯</span>`);
+      blank();
+      line(`<span class="clr-d">Dashboard active. Use 'clear' to reset terminal.</span>`);
+    });
+
     // ─── Phase 16: TUI Hero Features ─────────────────────────────────────────
 
     // ── 1. `top` — btop-style live career dashboard ──────────────────────────
@@ -1494,8 +1724,8 @@
       document.addEventListener('keydown', onKey);
     });
 
-    window.closeOverlay = function (id, isSnake = false) {
-      if (isSnake) {
+    window.closeOverlay = function (id, simulateQ = false) {
+      if (simulateQ) {
         window.dispatchEvent(new KeyboardEvent('keydown', { key: 'q', bubbles: true }));
       } else {
         const el = document.getElementById(id);
@@ -1968,7 +2198,157 @@
       chatInp.addEventListener('keydown', onChatKey);
     });
 
-    // ── 6. Ctrl+R — fzf fuzzy finder ──────────────────────────────────────────
+    // ── 7. `ytm` — YouTube Music Terminal Player ──────────────────────────────
+    let ytPlayer = null;
+    let ytPlayerReady = false;
+    let ytmUpdateInterval = null;
+
+    // Load YouTube IFrame API
+    const ytScriptTag = document.createElement('script');
+    ytScriptTag.src = "https://www.youtube.com/iframe_api";
+    const firstScript = document.getElementsByTagName('script')[0];
+    firstScript.parentNode.insertBefore(ytScriptTag, firstScript);
+
+    window.onYouTubeIframeAPIReady = function () {
+      ytPlayerReady = true;
+    };
+
+    function formatYtmTime(sec) {
+      if (!sec || isNaN(sec)) return "00:00";
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function updateYtmUI() {
+      if (!ytPlayer || !ytPlayer.getPlayerState) return;
+      const state = ytPlayer.getPlayerState();
+
+      const statusEl = document.getElementById('ytm-status');
+      const eqEl = document.getElementById('ytm-eq');
+      // YT.PlayerState: -1 (unstarted), 0 (ended), 1 (playing), 2 (paused), 3 (buffering), 5 (video cued)
+      if (state === 1) {
+        statusEl.textContent = '[ PLAYING ]';
+        const bars = [' ', '▂', '▃', '▄', '▅', '▆', '▇', '█'];
+        let eqStr = '';
+        for (let i = 0; i < 5; i++) eqStr += bars[Math.floor(Math.random() * bars.length)] + ' ';
+        eqEl.textContent = eqStr.trim();
+      }
+      else if (state === 2) {
+        statusEl.textContent = '[ PAUSED ]';
+        eqEl.textContent = '▃ ▃ ▃ ▃ ▃';
+      }
+      else if (state === 3) statusEl.textContent = '[ BUFFERING ]';
+      else if (state === 0) {
+        statusEl.textContent = '[ ENDED ]';
+        document.getElementById('ytm-progress-bar').innerHTML = '█'.repeat(20);
+        eqEl.textContent = '  ▂ ▃ ▂  ';
+      }
+      else statusEl.textContent = '[ IDLE ]';
+
+      if (state === 1 || state === 2) {
+        const data = ytPlayer.getVideoData();
+        if (data && data.title) {
+          document.getElementById('ytm-title').textContent = data.title;
+        }
+
+        const curr = ytPlayer.getCurrentTime() || 0;
+        const total = ytPlayer.getDuration() || 1;
+
+        document.getElementById('ytm-time-current').textContent = formatYtmTime(curr);
+        document.getElementById('ytm-time-total').textContent = formatYtmTime(total);
+
+        const width = window.innerWidth <= 768 ? 15 : 20;
+        const MathClamp = (num, min, max) => Math.min(Math.max(num, min), max);
+        const pct = MathClamp(curr / total, 0, 1);
+        const fillChars = Math.round(pct * width);
+        const fill = '█'.repeat(fillChars);
+        const empty = '░'.repeat(width - fillChars);
+        document.getElementById('ytm-progress-bar').innerHTML = `${fill}<span style="color:var(--dim)">${empty}</span>`;
+      }
+    }
+
+    function extractVideoId(url) {
+      const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = url.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : url;
+    }
+
+    reg('ytm', 'terminal youtube music player tribute (ytm [url/id])', (arg) => {
+      let videoId = "iChaC_Trtto"; // Default song
+      if (!arg) {
+        line(`<span class="clr-m">Loading default curated mix...</span>`);
+      } else {
+        videoId = extractVideoId(arg.trim());
+      }
+
+      if (!ytPlayerReady) {
+        line(`<span class="clr-y">YouTube API is still loading. Please try again in a moment.</span>`);
+        return;
+      }
+
+      const overlay = document.getElementById('ytm-overlay');
+      overlay.classList.add('open');
+      document.getElementById('ytm-title').textContent = "Buffering...";
+      document.getElementById('ytm-status').textContent = "[ STARTING ]";
+      document.getElementById('ytm-time-current').textContent = "00:00";
+      document.getElementById('ytm-time-total').textContent = "00:00";
+      document.getElementById('ytm-progress-bar').innerHTML = '░'.repeat(20);
+
+      window.closeOverlayYtm = function () {
+        overlay.classList.remove('open');
+        if (ytPlayer && ytPlayer.stopVideo) {
+          ytPlayer.stopVideo();
+        }
+        clearInterval(ytmUpdateInterval);
+        document.removeEventListener('keydown', onKeyYtm);
+        input.focus();
+      };
+
+      function onKeyYtm(e) {
+        if (e.key === 'q' || e.key === 'Escape') {
+          window.closeOverlayYtm();
+        } else if (e.key === 'p' || e.key === ' ' || e.code === 'Space') {
+          e.preventDefault();
+          if (ytPlayer && ytPlayer.getPlayerState) {
+            const state = ytPlayer.getPlayerState();
+            if (state === 1) ytPlayer.pauseVideo();
+            else ytPlayer.playVideo();
+          }
+        }
+      }
+      document.addEventListener('keydown', onKeyYtm);
+
+      if (!ytPlayer) {
+        ytPlayer = new YT.Player('yt-player-container', {
+          height: '0',
+          width: '0',
+          videoId: videoId,
+          playerVars: {
+            'playsinline': 1,
+            'autoplay': 1,
+            'controls': 0,
+          },
+          events: {
+            'onReady': (event) => {
+              event.target.playVideo();
+              ytmUpdateInterval = setInterval(updateYtmUI, 500);
+            },
+            'onStateChange': updateYtmUI,
+            'onError': (event) => {
+              document.getElementById('ytm-title').textContent = "Error loading video.";
+              document.getElementById('ytm-status').textContent = "[ ERROR ]";
+            }
+          }
+        });
+      } else {
+        ytPlayer.loadVideoById(videoId);
+        clearInterval(ytmUpdateInterval);
+        ytmUpdateInterval = setInterval(updateYtmUI, 500);
+      }
+    });
+
+    // ── 8. Ctrl+R — fzf fuzzy finder ──────────────────────────────────────────
     (function initFzf() {
       const overlay = document.getElementById('fzf-overlay');
       // Build the fzf DOM inside the overlay
@@ -2181,6 +2561,41 @@
         input.focus();
       }
     }, { passive: true });
+
+    // Make YTM Widget Draggable
+    (function makeDraggable() {
+      const widget = document.getElementById('ytm-overlay');
+      const header = document.getElementById('ytm-header');
+      let isDragging = false, startX, startY, initialX, initialY;
+
+      header.style.cursor = 'grab';
+      header.addEventListener('mousedown', e => {
+        isDragging = true;
+        header.style.cursor = 'grabbing';
+        startX = e.clientX;
+        startY = e.clientY;
+        initialX = widget.offsetLeft;
+        initialY = widget.offsetTop;
+
+        widget.style.bottom = 'auto';
+        widget.style.right = 'auto';
+        widget.style.left = initialX + 'px';
+        widget.style.top = initialY + 'px';
+      });
+
+      document.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        widget.style.left = (initialX + dx) + 'px';
+        widget.style.top = (initialY + dy) + 'px';
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+        header.style.cursor = 'grab';
+      });
+    })();
 
     bootSequence();
   </script>
