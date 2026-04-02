@@ -1000,148 +1000,6 @@
       line-height: 1.7;
     }
 
-    /* Buddy Widget */
-    .floating-widget {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 180px;
-      background: rgba(10, 10, 11, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      z-index: 2000;
-      font-family: var(--font-mono);
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      transition: border-color 0.3s ease;
-      cursor: grab;
-      user-select: none;
-    }
-
-    .floating-widget:hover {
-      border-color: var(--cyan);
-    }
-
-    #buddy-widget-header {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 6px 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      font-size: 10px;
-      letter-spacing: 1px;
-      color: var(--brand-gold);
-      font-weight: 700;
-    }
-
-    .widget-controls {
-      display: flex;
-      gap: 4px;
-    }
-
-    .widget-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      opacity: 0.6;
-    }
-
-    .widget-dot.green {
-      background: #50fa7b;
-    }
-
-    .widget-dot.yellow {
-      background: #f1fa8c;
-    }
-
-    .widget-dot.red {
-      background: #ff5555;
-    }
-
-    #buddy-widget-content {
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    #buddy-widget-ascii {
-      margin: 0;
-      font-size: 12px;
-      line-height: 1.2;
-      color: var(--white);
-      text-align: center;
-      filter: drop-shadow(0 0 5px var(--cyan));
-      animation: buddy-float 3s ease-in-out infinite;
-    }
-
-    .buddy-mini-stats {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .mini-stat-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .m-label {
-      font-size: 9px;
-      color: var(--dim);
-      width: 8px;
-    }
-
-    .m-bar {
-      flex: 1;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-
-    .m-fill {
-      height: 100%;
-      width: 0%;
-      transition: width 0.5s ease;
-    }
-
-    #m-bar-hunger {
-      background: #f1fa8c;
-    }
-
-    #m-bar-happy {
-      background: #8be9fd;
-    }
-
-    #m-bar-energy {
-      background: #ff79c6;
-    }
-
-    #buddy-widget-hint {
-      font-size: 8px;
-      color: var(--dim);
-      text-align: center;
-      padding-bottom: 8px;
-      opacity: 0.5;
-    }
-
-    @keyframes buddy-float {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-3px);
-      }
-    }
 
     .chat-you {
       color: var(--cyan);
@@ -1310,40 +1168,6 @@
         exit</div>
     </div>
 
-    <!-- Buddy Widget: Persistent drifting companion -->
-    <div id="buddy-widget" class="floating-widget">
-      <div id="buddy-widget-header">
-        <span id="buddy-widget-name">Tengu</span>
-        <div class="widget-controls">
-          <span class="widget-dot green"></span>
-          <span class="widget-dot yellow"></span>
-          <span class="widget-dot red"></span>
-        </div>
-      </div>
-      <div id="buddy-widget-content">
-        <pre id="buddy-widget-ascii">  \  /
- ( ^.^ )
- c(")(")</pre>
-        <div class="buddy-mini-stats">
-          <div class="mini-stat-row"><span class="m-label">F</span>
-            <div class="m-bar">
-              <div id="m-bar-hunger" class="m-fill"></div>
-            </div>
-          </div>
-          <div class="mini-stat-row"><span class="m-label">H</span>
-            <div class="m-bar">
-              <div id="m-bar-happy" class="m-fill"></div>
-            </div>
-          </div>
-          <div class="mini-stat-row"><span class="m-label">E</span>
-            <div class="m-bar">
-              <div id="m-bar-energy" class="m-fill"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="buddy-widget-hint">CLICK TO INTERACT</div>
-    </div>
 
     <!-- git log: career timeline -->
     <div id="gitlog-overlay" aria-label="Career timeline">
@@ -1664,7 +1488,6 @@
 
     function saveBuddy() {
       localStorage.setItem('buddyState', JSON.stringify(buddyState));
-      if (typeof updateBuddyWidget === 'function') updateBuddyWidget();
     }
 
     function updateBuddyStats() {
@@ -1729,66 +1552,6 @@
       blank();
     });
 
-    function updateBuddyWidget() {
-      const widget = document.getElementById('buddy-widget');
-      if (!widget || !buddyState) return;
-      document.getElementById('buddy-widget-name').textContent = buddyState.name;
-      document.getElementById('m-bar-hunger').style.width = buddyState.hunger + '%';
-      document.getElementById('m-bar-happy').style.width = buddyState.happiness + '%';
-      document.getElementById('m-bar-energy').style.width = buddyState.energy + '%';
-
-      let face = ASCII_BUDDY.happy;
-      if (buddyState.energy < 30) face = ASCII_BUDDY.sleepy;
-      else if (buddyState.happiness < 40 || buddyState.hunger < 40) face = ASCII_BUDDY.sad;
-      document.getElementById('buddy-widget-ascii').textContent = face;
-    }
-    updateBuddyWidget();
-
-    // Background update every 60s
-    setInterval(() => {
-      updateBuddyStats();
-      updateBuddyWidget();
-    }, 60000);
-
-    // Make Buddy Widget Draggable & Interactive
-    (function initBuddyWidget() {
-      const widget = document.getElementById('buddy-widget');
-      const header = document.getElementById('buddy-widget-header');
-      let isDragging = false, startX, startY, initialX, initialY;
-
-      widget.addEventListener('click', (e) => {
-        if (!isDragging) {
-          runCommand('buddy');
-        }
-      });
-
-      header.addEventListener('mousedown', e => {
-        isDragging = true;
-        startX = e.clientX;
-        startY = e.clientY;
-        initialX = widget.offsetLeft;
-        initialY = widget.offsetTop;
-        widget.style.cursor = 'grabbing';
-        e.stopPropagation();
-      });
-
-      document.addEventListener('mousemove', e => {
-        if (!isDragging) return;
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        widget.style.bottom = 'auto';
-        widget.style.right = 'auto';
-        widget.style.left = (initialX + dx) + 'px';
-        widget.style.top = (initialY + dy) + 'px';
-      });
-
-      document.addEventListener('mouseup', () => {
-        if (isDragging) {
-          isDragging = false;
-          widget.style.cursor = 'grab';
-        }
-      });
-    })();
 
     reg('dashboard', 'open TuiStudio-inspired multi-pane terminal dashboard view', () => {
       terminal.innerHTML = '';
