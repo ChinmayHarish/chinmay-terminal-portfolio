@@ -1355,7 +1355,7 @@
 
     reg('help', 'list all commands', () => {
       blank();
-      line('<span class="clr-gold font-bold">STUDIO TERMINAL v4.0 [BUDDY CONNECTED]</span>');
+      line('<span class="clr-gold font-bold">STUDIO TERMINAL v4.0</span>');
       Object.entries(CMD_META).forEach(([cmd, desc]) => {
         line(`  <span class="clr-g">${esc(cmd).padEnd(12)}</span><span class="clr-d">—</span> ${esc(desc)}`);
       });
@@ -1473,105 +1473,23 @@
       line(`<span class="clr-g">Theme switched to ${themeName}</span>`);
     });
 
-    // ─── Claude Code Buddy (Tamagotchi) ──────────────────────────────────────
-    const ASCII_BUDDY = {
-      happy: `  \\  /\n ( ^.^ )\n c(")(")`,
-      sad: `  \\  /\n ( -.- )\n c(")(")`,
-      sleepy: `   zZ\n  \\  /\n ( -.- )\n c(")(")`
-    };
-
-    let buddyState = null;
-    try { buddyState = JSON.parse(localStorage.getItem('buddyState')); } catch (e) { }
-    if (!buddyState) {
-      buddyState = { hunger: 50, happiness: 50, energy: 100, lastInteraction: Date.now(), name: 'Tengu' };
-    }
-
-    function saveBuddy() {
-      localStorage.setItem('buddyState', JSON.stringify(buddyState));
-    }
-
-    function updateBuddyStats() {
-      const now = Date.now();
-      const hoursPassed = (now - buddyState.lastInteraction) / (1000 * 60 * 60);
-      if (hoursPassed > 0.05) {
-        const decay = Math.floor(hoursPassed * 12);
-        buddyState.hunger = Math.max(0, buddyState.hunger - decay);
-        buddyState.happiness = Math.max(0, buddyState.happiness - decay);
-        buddyState.energy = Math.max(0, buddyState.energy - (decay / 2));
-        buddyState.lastInteraction = now;
-        saveBuddy();
-      }
-    }
-
-    reg('buddy', 'interact with terminal companion (feed, play, sleep)', (arg) => {
-      updateBuddyStats();
-      const args = arg.trim().toLowerCase().split(' ');
-      const action = args[0];
-
-      if (action === 'feed') {
-        buddyState.hunger = Math.min(100, buddyState.hunger + 30);
-        buddyState.lastInteraction = Date.now();
-        saveBuddy();
-        line(`<span class="clr-g">Fed ${buddyState.name}! Fullness increased.</span>`);
-        return;
-      }
-      if (action === 'play') {
-        buddyState.happiness = Math.min(100, buddyState.happiness + 30);
-        buddyState.energy = Math.max(0, buddyState.energy - 15);
-        buddyState.hunger = Math.max(0, buddyState.hunger - 10);
-        buddyState.lastInteraction = Date.now();
-        saveBuddy();
-        line(`<span class="clr-c">Played with ${buddyState.name}! Happiness increased, energy decreased.</span>`);
-        return;
-      }
-      if (action === 'sleep') {
-        buddyState.energy = Math.min(100, buddyState.energy + 40);
-        buddyState.lastInteraction = Date.now();
-        saveBuddy();
-        line(`<span class="clr-m">${buddyState.name} is resting... Energy increased.</span>`);
-        return;
-      }
-
-      let face = ASCII_BUDDY.happy;
-      if (buddyState.energy < 30) face = ASCII_BUDDY.sleepy;
-      else if (buddyState.happiness < 40 || buddyState.hunger < 40) face = ASCII_BUDDY.sad;
-
-      blank();
-      line(`<span class="clr-d">╭─────────────────────────╮</span>`);
-      line(`<span class="clr-d">│ </span><span class="clr-gold font-bold">${buddyState.name.padEnd(23)}</span><span class="clr-d"> │</span>`);
-      const faceLines = face.split('\\n');
-      faceLines.forEach(l => {
-        line(`<span class="clr-d">│ </span><span class="clr-white">${l.padEnd(23)}</span><span class="clr-d"> │</span>`);
-      });
-      line(`<span class="clr-d">├─────────────────────────┤</span>`);
-      line(`<span class="clr-d">│ </span><span class="clr-y">FULL:  </span> ${barStr(buddyState.hunger, '#f1fa8c', 10)}     <span class="clr-d">│</span>`);
-      line(`<span class="clr-d">│ </span><span class="clr-c">HAPPY: </span> ${barStr(buddyState.happiness, '#8be9fd', 10)}     <span class="clr-d">│</span>`);
-      line(`<span class="clr-d">│ </span><span class="clr-m">ENERGY:</span> ${barStr(buddyState.energy, '#ff79c6', 10)}     <span class="clr-d">│</span>`);
-      line(`<span class="clr-d">╰─────────────────────────╯</span>`);
-      line(`  <span class="clr-d">actions: buddy feed | buddy play | buddy sleep</span>`);
-      blank();
-    });
 
 
-    reg('dashboard', 'open TuiStudio-inspired multi-pane terminal dashboard view', () => {
+    reg('dashboard', 'open TuiStudio-inspired terminal dashboard view', () => {
       terminal.innerHTML = '';
       blank();
-      updateBuddyStats();
       const statusTitle = "SYSTEM STATUS".padEnd(22);
-      const buddyTitle = "COMPANION STATUS".padEnd(23);
-      line(`<span class="clr-c">╭────────────────────────┬─────────────────────────╮</span>`);
-      line(`<span class="clr-c">│</span> <span class="clr-gold font-bold">${statusTitle}</span> <span class="clr-c">│</span> <span class="clr-gold font-bold">${buddyTitle}</span> <span class="clr-c">│</span>`);
-      line(`<span class="clr-c">├────────────────────────┼─────────────────────────┤</span>`);
+      line(`<span class="clr-c">╭────────────────────────╮</span>`);
+      line(`<span class="clr-c">│</span> <span class="clr-gold font-bold">${statusTitle}</span> <span class="clr-c">│</span>`);
+      line(`<span class="clr-c">├────────────────────────┤</span>`);
 
       const uptimeStr = (`UPTIME: ${Math.floor(performance.now() / 1000)}s`).padEnd(22);
-      const buddyName = (`NAME: ${buddyState ? buddyState.name : 'Tengu'}`).padEnd(23);
-      line(`<span class="clr-c">│</span> <span class="clr-white">${uptimeStr}</span> <span class="clr-c">│</span> <span class="clr-white">${buddyName}</span> <span class="clr-c">│</span>`);
+      line(`<span class="clr-c">│</span> <span class="clr-white">${uptimeStr}</span> <span class="clr-c">│</span>`);
 
       const memStr = ("MEM: NORMAL").padEnd(22);
-      const buddyHappy = (`HAPPY: ${buddyState ? buddyState.happiness : '0'}%`).padEnd(23);
-      line(`<span class="clr-c">│</span> <span class="clr-white">${memStr}</span> <span class="clr-c">│</span> <span class="clr-white">${buddyHappy}</span> <span class="clr-c">│</span>`);
+      line(`<span class="clr-c">│</span> <span class="clr-white">${memStr}</span> <span class="clr-c">│</span>`);
 
-      line(`<span class="clr-c">╰────────────────────────┴─────────────────────────╯</span>`);
+      line(`<span class="clr-c">╰────────────────────────╯</span>`);
       blank();
       line(`<span class="clr-d">Dashboard active. Use 'clear' to reset terminal.</span>`);
     });
@@ -2501,7 +2419,6 @@
         '',
         `  ${lnk('mailto:' + DATA.email, DATA.email)} <span class="clr-d">·</span> ${lnk(DATA.github, 'GitHub')} <span class="clr-d">·</span> ${lnk(DATA.linkedin, 'LinkedIn')}`,
         '',
-        '  <span class="clr-g">●</span> <span class="clr-white">Claude Code Buddy:</span> <span class="clr-c">INITIALIZED [v1.0]</span>',
         '',
         `<span class="clr-d">Type </span><span class="clr-c">help</span><span class="clr-d"> to see available commands.</span>`
       ];
