@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angamardana | Warm Sand 2-Page Poster</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inter:wght@400;500;600;700;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            /* Warm Sand Theme */
+            --bg-color: #EAE4DD;
+            --ink-color: #292019;
+            --accent-color: #D9381E;
+        }
+
+        body {
+            background-color: #d1cbc3;
+            /* Darker backdrop so the pages look like physical papers on screen */
+            color: var(--ink-color);
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 15mm;
+            background-color: var(--bg-color);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            /* Force page break for printing */
+            page-break-after: always;
+            break-after: page;
+        }
+
+        .title-hero {
+            font-size: 5.6rem;
+            line-height: 0.85;
+            letter-spacing: -0.06em;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .list-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            /* Significantly more breathing room */
+            border-bottom: 1px solid var(--ink-color);
+            font-size: 1.05rem;
+            /* Larger font since we have 2 pages */
+            font-weight: 700;
+        }
+
+        .list-row:last-child {
+            border-bottom: none;
+        }
+
+        .row-left {
+            display: flex;
+            align-items: baseline;
+            flex: 1;
+            padding-right: 16px;
+        }
+
+        .row-bullet {
+            width: 22px;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+        .row-title {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .row-notes {
+            width: 30%;
+            font-family: 'Caveat', cursive;
+            color: var(--accent-color);
+            font-size: 1.7rem;
+            /* Much larger and more legible handwriting */
+            text-align: center;
+            transform: rotate(-3deg) translateY(-2px);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            opacity: 0.95;
+        }
+
+        .row-cycles {
+            width: 15%;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .section-divider {
+            border-top: 5px solid var(--ink-color);
+            border-bottom: 2px solid var(--ink-color);
+            padding: 12px 0;
+            margin-top: 36px;
+            margin-bottom: 8px;
+            font-size: 1.15rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        /* Page footer for the 2-page sequence */
+        .page-footer {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 2px solid var(--ink-color);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .bottom-typography {
+            margin-top: auto;
+            /* Pushes it to the bottom of the second page */
+            margin-bottom: 40px;
+            font-size: 4.5rem;
+            font-weight: 500;
+            letter-spacing: -0.05em;
+            line-height: 0.9;
+            position: relative;
+            user-select: none;
+        }
+
+        .stagger-a {
+            margin-left: 0;
+        }
+
+        .stagger-b {
+            text-align: center;
+            margin-right: 8%;
+        }
+
+        .stagger-c {
+            text-align: center;
+            margin-left: 12%;
+        }
+
+        .stagger-d {
+            text-align: right;
+        }
+
+        .inset-img {
+            position: absolute;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.2);
+            mix-blend-mode: multiply;
+            opacity: 0.85;
+        }
+
+        .img-1 {
+            width: 160px;
+            height: 210px;
+            left: 10px;
+            top: 60px;
+            z-index: 10;
+        }
+
+        .img-2 {
+            width: 140px;
+            height: 180px;
+            right: -10px;
+            bottom: 0px;
+            z-index: 10;
+        }
+
+        /* Print overrides to clear the background staging */
+        @media print {
+            body {
+                background: white !important;
+                padding: 0;
+                gap: 0;
+            }
+
+            .page {
+                background: var(--bg-color) !important;
+                color: var(--ink-color) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                margin: 0;
+                box-shadow: none;
+                border: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans" id="app-body">
+
+    <!-- PAGE 1 -->
+    <div class="page">
+        <!-- Giant Top Title -->
+        <h1 class="title-hero mb-8">ANGAMARDANA</h1>
+
+        <div class="z-20 relative">
+            <!-- SECTION A -->
+            <div class="section-divider">A &mdash; Standing Processes</div>
+            <div class="border-b-2 border-[var(--ink-color)]">
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">1. Stretching Upward</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">2. Bending Forward</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">3. Bending Forward / Legs Crossed</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">4. Bending Forward / Feet Apart</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">5. Bending Sideways / Feet Apart (6 Hand Postures)</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">6. Stretching Sideways / One Arm Raised</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">7. Stretching Sideways / Clasping Wrist</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+            </div>
+
+            <!-- SECTION B -->
+            <div class="section-divider">B &mdash; Squatting Processes</div>
+            <div class="border-b-2 border-[var(--ink-color)]">
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">1. Straighten Leg to Front</div>
+                    </div>
+                    <div class="row-notes">Into &amp; Out</div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">2. Straighten Leg to Side</div>
+                    </div>
+                    <div class="row-notes">Into &amp; Out</div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">3. Straighten Both Legs &amp; Stand</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">4. One Leg Stretched Side (Up on 2 Hands)</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">5. One Leg Stretched Side (Up on 1 Hand)</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">6. Jumping</div>
+                    </div>
+                    <div class="row-notes">exhale on jump</div>
+                    <div class="row-cycles">(MAX)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">7. Push Ups (Emptiness)</div>
+                    </div>
+                    <div class="row-notes">until breath settles</div>
+                    <div class="row-cycles">(&mdash;)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">8. Balasana (Child's Posture)</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(&mdash;)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <span>Part I &mdash; Standing &amp; Squatting</span>
+            <span>01 / 02</span>
+        </div>
+    </div>
+
+
+    <!-- PAGE 2 -->
+    <div class="page">
+        <!-- Subdued header for Page 2 -->
+        <h2 class="text-3xl font-black tracking-tighter uppercase border-b-4 border-[var(--ink-color)] pb-4 mb-8">
+            Angamardana &mdash; II</h2>
+
+        <div class="z-20 relative">
+            <!-- SECTION C -->
+            <div class="section-divider !mt-0">C &mdash; Sitting Processes</div>
+            <div class="border-b-2 border-[var(--ink-color)]">
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">1. Single Leg Raised in Front</div>
+                    </div>
+                    <div class="row-notes">Into w/ inhale, out exhale</div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">2. Both Legs and Arms Raised in Front</div>
+                    </div>
+                    <div class="row-notes">Into w/ inhale, out exhale</div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">3. Legs Straightened Holding Big Toes</div>
+                    </div>
+                    <div class="row-notes">Into w/ inhale, out exhale</div>
+                    <div class="row-cycles">(1)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">4. Legs Apart Bending Sideways (6 Hand Pos)</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">5. Veerasana</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(5 MIN)</div>
+                </div>
+            </div>
+
+            <!-- SECTION D -->
+            <div class="section-divider">D &mdash; Lying Down Processes</div>
+            <div class="border-b-2 border-[var(--ink-color)]">
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">1. Knee to Forehead</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">2. Rocking</div>
+                    </div>
+                    <div class="row-notes">no breathing pattern</div>
+                    <div class="row-cycles">(3-5)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">3. Chair Twisting</div>
+                    </div>
+                    <div class="row-notes">Into exhale, come out inhale</div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">4. Spine Curved Twisting</div>
+                    </div>
+                    <div class="row-notes">Into exhale, come out inhale</div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">5. 45&deg; and Legs to Side Twisting</div>
+                    </div>
+                    <div class="row-notes">Into exhale, come out inhale</div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">6. One Leg to Side Twisting</div>
+                    </div>
+                    <div class="row-notes"></div>
+                    <div class="row-cycles">(3)</div>
+                </div>
+                <div class="list-row">
+                    <div class="row-left">
+                        <div class="row-bullet">&bull;</div>
+                        <div class="row-title">7. Knee to Elbow</div>
+                    </div>
+                    <div class="row-notes">no breathing pattern</div>
+                    <div class="row-cycles">(MAX)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Giant Typography pushed to the bottom of Page 2 -->
+        <div class="bottom-typography z-10">
+            <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&w=400&q=80"
+                alt="Texture" class="inset-img img-1 rounded-sm shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1499540633125-484965b60031?auto=format&fit=crop&w=400&q=80"
+                alt="Texture 2" class="inset-img img-2 rounded-sm shadow-2xl">
+
+            <div class="stagger-a">(A) Standing</div>
+            <div class="stagger-b">(B) Squatting</div>
+            <div class="stagger-c">(C) Sitting</div>
+            <div class="stagger-d">(D) Lying Down</div>
+        </div>
+
+        <div class="page-footer">
+            <span>Part II &mdash; Sitting &amp; Lying Down</span>
+            <span>02 / 02</span>
+        </div>
+    </div>
+
+</body>
+
+</html>
