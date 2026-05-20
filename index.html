@@ -1982,14 +1982,22 @@
       // High-precision weighted knowledge base
       const KB = [
         {
-          keys: ['years', 'long', 'total', 'duration', 'experience'],
-          weight: { 'years': 50, 'long': 30, 'total': 20 },
+          keys: ['hi', 'hello', 'hey', 'greetings', 'hola', 'sup', 'yo', 'morning', 'afternoon', 'evening', 'help', 'start'],
+          a: 'Hi! Ask me anything about Chinmay — his work, projects, skills, or how to reach him. Type /exit to quit.'
+        },
+        {
+          keys: ['age', 'old', 'birthday', 'born', 'birth', 'date'],
+          a: 'Chinmay was born in 2001, making him around 24–25 years old. He graduated with his Bachelor of Engineering in 2023.'
+        },
+        {
+          keys: ['years', 'long', 'total', 'duration', 'experience', 'career', 'jobs', 'work', 'employment', 'history', 'past'],
+          weight: { 'years': 50, 'long': 30, 'total': 20, 'experience': 30, 'work': 40, 'job': 40, 'career': 40 },
           a: 'Chinmay has approximately 3 years of professional experience, including 2.7+ years as an Associate Product Manager and 4 months as a Data Analyst Intern.'
         },
         {
-          keys: ['impact', 'achievements', 'success', 'results', 'metrics', 'reduce', 'growth'],
+          keys: ['impact', 'achievements', 'success', 'results', 'metrics', 'reduce', 'growth', 'impacts', 'revenue'],
           weight: { '80k': 50, '30%': 50, 'impact': 30, 'achievements': 30, 'metrics': 30 },
-          a: 'Major impacts: Lead 0-to-1 launch of Infiniteworks (80k+ ops), reduced signup drop-offs by 30%, reactivated leads for a ₹2 Cr revenue pipeline, and hit 60% attrition reduction on Palladium.'
+          a: 'Major impacts: Led 0-to-1 launch of Infiniteworks (80k+ ops), reduced signup drop-offs by 30%, reactivated leads for a ₹2 Cr revenue pipeline, optimized SQL query latency by 15%, and hit 60% attrition reduction on Palladium.'
         },
         {
           keys: ['why', 'hire', 'qualities', 'strengths', 'expert', 'different', 'unique'],
@@ -1997,38 +2005,38 @@
           a: 'Chinmay is an expert at bridging product strategy with technical depth. He excels at zero-to-one product delivery, data-driven funnel optimization, and building high-performance TUI experiences.'
         },
         {
-          keys: ['current', 'doing', 'active', 'now', 'primenumbers', 'work', 'job', 'pm', 'role', 'position'],
-          weight: { 'current': 40, 'now': 30, 'doing': 30, 'primenumbers': 50 },
+          keys: ['current', 'doing', 'active', 'now', 'primenumbers', 'work', 'job', 'pm', 'role', 'position', 'company'],
+          weight: { 'current': 40, 'now': 30, 'doing': 30, 'primenumbers': 50, 'work': 20, 'job': 20 },
           a: 'Chinmay is currently an Associate Product Manager at Primenumbers Technologies (2023–present). He leads the Infiniteworks roadmap/GTM strategy and handles end-to-end product delivery.'
         },
         {
-          keys: ['project', 'side', 'build', 'uproot', 'cyberserpent', 'spotify', 'tetris', 'make', 'create'],
+          keys: ['project', 'projects', 'side', 'build', 'builds', 'uproot', 'cyberserpent', 'spotify', 'tetris', 'make', 'create', 'creations'],
           weight: { 'uproot': 50, 'snake': 40, 'spotify': 40, 'tetris': 40, 'projects': 30 },
-          a: 'Key projects: **Uproot** (agentic IDP), **CyberSerpent** (cyberpunk Snake), **Spotify Visualizer** (Three.js), **Neon Tetris** (P5.js). type `projects` to learn more.'
+          a: 'Key projects: **Uproot** (agentic IDP), **CyberSerpent** (cyberpunk Snake), **Spotify Visualizer** (Three.js), and **Neon Tetris** (P5.js). Type `projects` in the main terminal to learn more.'
         },
         {
-          keys: ['skill', 'tech', 'stack', 'tool', 'figma', 'sql', 'python', 'react', 'code', 'language'],
+          keys: ['skill', 'skills', 'tech', 'stack', 'tool', 'tools', 'figma', 'sql', 'python', 'react', 'code', 'language', 'languages'],
           weight: { 'stack': 40, 'code': 30, 'python': 30, 'react': 30, 'tools': 30 },
-          a: 'Tools: Jira, Linear, Notion. Analytics: PostgreSQL, Mixpanel, SQL. Design: Figma. Engineering: JS/TS, Python, Next.js, and React.'
+          a: 'Tools: Jira, Linear, Notion. Analytics: PostgreSQL, Mixpanel, Google Analytics, SQL. Design: Figma. Engineering: JS/TS, Python, Next.js, and React.'
         },
         {
-          keys: ['education', 'degree', 'college', 'bms', 'bmsce', 'university', 'study', 'school'],
+          keys: ['education', 'degree', 'college', 'bms', 'bmsce', 'university', 'study', 'school', 'grade', 'gpa', 'cgpa'],
           weight: { 'degree': 50, 'college': 40, 'bms': 50, 'study': 30 },
-          a: 'B.E. in Chemical Engineering from BMS College of Engineering, Bengaluru (2019–2023), CGPA 8.8/10.'
+          a: 'B.E. in Chemical Engineering from BMS College of Engineering, Bengaluru (2019–2023), CGPA 8.8/10. Before that, he completed schooling at Delhi Public School.'
         },
         {
-          keys: ['contact', 'email', 'phone', 'number', 'mobile', 'reach', 'linkedin', 'github', 'connect'],
+          keys: ['contact', 'email', 'phone', 'number', 'mobile', 'reach', 'linkedin', 'github', 'connect', 'social', 'socials'],
           weight: { 'phone': 50, 'number': 40, 'email': 40, 'reach': 30, 'contact': 30 },
-          a: `Reach Chinmay via Email (chinmayharish03@gmail.com), Phone (+91 9449124052), or connect on LinkedIn (linkedin.com/in/chinmay-harish-03106t).`
+          a: `Reach Chinmay via Email (chinmayharish03@gmail.com), Phone (+91 9449124052), or connect on LinkedIn (linkedin.com/in/chinmay-harish-03106t) / GitHub (github.com/ChinmayHarish).`
         },
         {
-          keys: ['location', 'where', 'based', 'bengaluru', 'bangalore', 'india', 'live'],
+          keys: ['location', 'where', 'based', 'bengaluru', 'bangalore', 'india', 'live', 'living', 'city'],
           weight: { 'location': 50, 'where': 30, 'live': 30, 'bengaluru': 40 },
           a: 'Chinmay is based in Bengaluru, India.'
         },
         {
-          keys: ['who', 'about', 'yourself', 'chinmay', 'background', 'story'],
-          weight: { 'who': 40, 'about': 30, 'yourself': 40, 'background': 30 },
+          keys: ['who', 'about', 'yourself', 'chinmay', 'background', 'story', 'profile', 'bio'],
+          weight: { 'who': 40, 'yourself': 40, 'background': 30 },
           a: 'Chinmay Harish is a Product Manager and Builder based in Bengaluru. He specializes in building AI-powered tools and high-performance product experiences.'
         },
       ];
@@ -2049,7 +2057,7 @@
         isTyping = true;
 
         const cleanQ = q.toLowerCase().replace(/[^a-z0-9 ]/g, '');
-        const words = cleanQ.split(/\s+/).filter(w => w.length > 2);
+        const words = cleanQ.split(/\s+/).filter(w => w.length >= 2);
 
         let bestMatch = null;
         let highestScore = 0;
@@ -2057,19 +2065,35 @@
         KB.forEach(entry => {
           let score = 0;
 
-          // 1. Keyword check
           words.forEach(word => {
-            if (entry.keys.includes(word)) {
-              score += 10;
-              // 2. Bonus for high-weight terms
-              if (entry.weight && entry.weight[word]) {
-                score += entry.weight[word];
+            let bestWordScore = 0;
+            entry.keys.forEach(key => {
+              let scoreForKey = 0;
+              // 1. Exact Match
+              if (word === key) {
+                scoreForKey = 15;
               }
+              // 2. Simple Plural/Singular Suffix match (s, es)
+              else if (word === key + 's' || key === word + 's' || word === key + 'es' || key === word + 'es') {
+                scoreForKey = 12;
+              }
+              // 3. Substring check for longer words (length >= 3)
+              else if (word.length >= 3 && key.length >= 3 && (word.includes(key) || key.includes(word))) {
+                scoreForKey = 10;
+              }
+
+              if (scoreForKey > bestWordScore) {
+                bestWordScore = scoreForKey;
+              }
+            });
+
+            score += bestWordScore;
+
+            // 4. Bonus for specific weight terms
+            if (entry.weight && entry.weight[word]) {
+              score += entry.weight[word];
             }
           });
-
-          // 3. Exact phrase match bonus
-          if (cleanQ.includes(entry.keys.join(' '))) score += 20;
 
           if (score > highestScore) {
             highestScore = score;
@@ -2077,7 +2101,7 @@
           }
         });
 
-        const answer = (highestScore > 15) ? bestMatch.a : "I only know about Chinmay's career! Try asking about his experience, projects, or contact info.";
+        const answer = (highestScore >= 10) ? bestMatch.a : "I only know about Chinmay's career! Try asking about his experience, projects, or contact info.";
 
         const aiEl = document.createElement('div');
         aiEl.className = 'chat-ai';
